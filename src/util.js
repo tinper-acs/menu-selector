@@ -31,3 +31,13 @@ export function isLabelInValue(props) {
   const { labelInValue } = props;
   return labelInValue || false;
 }
+
+// =============== Legacy ===============
+export const UNSELECTABLE_STYLE = {
+  userSelect: 'none',
+  WebkitUserSelect: 'none',
+};
+
+export const UNSELECTABLE_ATTRIBUTE = {
+  unselectable: 'unselectable',
+};

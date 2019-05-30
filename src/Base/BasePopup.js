@@ -45,18 +45,17 @@ class BasePopup extends React.Component {
     const {
       rcTreeSelect: { onPopupKeyDown,onMenuSelect,onMenuMultipleSelect},
     } = this.context;
-    let menuItemProps = {};
-    if(multiple){
-      menuItemProps.onSelect = onMenuMultipleSelect;
-    }else{
-      menuItemProps.onClick = onMenuSelect
-    }
+    // let menuItemProps = {};
+    // if(multiple){
+    //   menuItemProps.onSelect = onMenuMultipleSelect;
+    // }else{
+    //   menuItemProps.onClick = onMenuSelect
+    // }
     let $notFound,$cloneMenuItems=[];
     if (!valueList || !valueList.length) {
       $notFound = this.renderNotFound();
     }else{
         valueList.forEach(item=>{
-          debugger;
           let _checked = Object.keys(selectorValueMap).indexOf(item[valueField]) > -1
           $cloneMenuItems.push(
             <li 
@@ -65,7 +64,7 @@ class BasePopup extends React.Component {
             className={`${prefixCls}-dropdown-menu-item ${_checked?`${prefixCls}-dropdown-menu-item-selected`:``}`}
             key={item[valueField]} 
             // value={JSON.stringify(item)} 
-            onClick={multiple?()=>{onMenuMultipleSelect(item)}:()=>{onMenuSelect(item)}}
+            onClick={multiple?()=>{onMenuMultipleSelect(item,_checked)}:()=>{onMenuSelect(item,_checked)}}
             >
               {item.value || item[valueField]}  
             </li>

@@ -1,7 +1,7 @@
 /**
  *
- * @title 单选
- * @description 单选
+ * @title 多选
+ * @description 多选
  *
  */
 
@@ -12,13 +12,19 @@ import '../../src/index.less';
 import '../demo.scss';
 
 
-class Demo extends React.Component {
+class Demo2 extends React.Component {
   state = {
     tsOpen: false,
     visible: false,
     searchValue: '1',
     value: 'test1',
-    valueList:[{label:'2',value:'test2'},],
+    valueList:[
+      {label:'563',value:'test563'},
+      {label:'563563',value:'test563563'},
+      {label:'563563563',value:'test563563563'}, 
+      {label:'563563563563',value:'test563563563563'},
+      {label:'5631563563',value:'test5631563563'},
+    ],
    
   };
   onSearch = (value, ...args) => {
@@ -67,10 +73,12 @@ class Demo extends React.Component {
       value,
       searchValue,
       tsOpen,
-      valueList
+      valueList,
+      multipleValue
     } = this.state;
     return (
       <div>
+
         <TreeSelect
           // prefixCls = {'u-select'}
           style={{ width: 300 }}
@@ -79,39 +87,18 @@ class Demo extends React.Component {
           dropdownStyle={{ maxHeight: 200, overflow: 'auto' }}
           placeholder={<i>请下拉选择</i>}
           searchPlaceholder="please search"
-          showSearch
-          allowClear
-          searchValue={searchValue}
-          value={value}
-          filterTreeNode={false}
-          onSearch={this.onSearch}
-          open={tsOpen}
+          multiple
+          value={multipleValue}
           valueList={valueList}
-          onChange={(val, ...args) => {
-            console.log('onChange', val, ...args);
-            if (val === 'test1') {
-              this.setState({ tsOpen: true });
-            } else {
-              this.setState({ tsOpen: false });
-            }
-            this.setState({ value: val });
-          }}
-          onDropdownVisibleChange={(v, info) => {
-            console.log('single onDropdownVisibleChange', v, info);
-            // document clicked
-            if (info.documentClickClose && value === 'test1') {
-              return false;
-            }
-            this.setState({
-              tsOpen: v,
-            });
-            return true;
-          }}
+          treeNodeFilterProp="title"
+          onChange={this.onMultipleChange}
           onSelect={this.onSelect}
+          onSearch={this.onSearch}
+          allowClear
         />
       </div>
     );
   }
 }
 
-export default Demo;
+export default Demo2;

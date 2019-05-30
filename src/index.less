@@ -7,6 +7,7 @@
 }
 
 .@{selectPrefixCls} {
+  outline: none;
   box-sizing: border-box;
   display: inline-block;
   position: relative;
@@ -30,25 +31,67 @@
     background-color: #fff;
   }
 
-  // arrow
+  // arrow 复写，不用这个
+  // &-arrow {
+  //   height: 26px;
+  //   position: absolute;
+  //   top: 1px;
+  //   right: 1px;
+  //   width: 20px;
+  //   &:after {
+  //     content: '';
+  //     border-color: #999999 transparent transparent transparent;
+  //     border-style: solid;
+  //     border-width: 5px 4px 0 4px;
+  //     height: 0;
+  //     width: 0;
+  //     margin-left: -4px;
+  //     margin-top: -2px;
+  //     position: absolute;
+  //     top: 50%;
+  //     left: 50%;
+  //   }
+  // }
+  :root &-arrow {
+    -webkit-filter: none;
+      filter: none;
+      font-size: 12px;
+  }
+  
   &-arrow {
-    height: 26px;
+    * {
+      display: none;
+    }
+    font-style: normal;
+    vertical-align: baseline;
+    text-align: center;
+    text-transform: none;
+    text-rendering: auto;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     position: absolute;
-    top: 1px;
-    right: 1px;
-    width: 20px;
-    &:after {
-      content: '';
-      border-color: #999999 transparent transparent transparent;
-      border-style: solid;
-      border-width: 5px 4px 0 4px;
-      height: 0;
-      width: 0;
-      margin-left: -4px;
-      margin-top: -2px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
+    top: 50%;
+    right: 8px;
+    line-height: 1;
+    margin-top: -6px;
+    display: inline-block;
+    font-size: 12px;
+    font-size: 9px \9;
+    -webkit-transform: scale(0.75) rotate(0deg);
+        -ms-transform: scale(0.75) rotate(0deg);
+            transform: scale(0.75) rotate(0deg);
+    /* IE6-IE8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=1, M12=0, M21=0, M22=1)";
+    zoom: 1;
+    &:before {
+      display: block;
+      font-family: "uf";
+      content: "\e609";
+      -webkit-transition: -webkit-transform 0.2s ease;
+      transition: -webkit-transform 0.2s ease;
+      transition: transform 0.2s ease;
+      transition: transform 0.2s ease, -webkit-transform 0.2s ease;
     }
   }
 
@@ -68,32 +111,36 @@
       font-weight: bold;
       position: absolute;
     }
+    //hover才展示
+    &:hover .@{selectPrefixCls}-selection__clear{
+      opacity: 1;
+    }
   }
 
   &-enabled {
     .@{selectPrefixCls}-selection {
       &:hover {
-        border-color: #23c0fa;
-        box-shadow: 0 0 2px fadeout(#2db7f5, 20%);
+        border-color: #40a9ff;
+        box-shadow: 0 0 2px fadeout(#40a9ff, 20%);
       }
       &:active {
-        border-color: #2db7f5;
+        border-color: #40a9ff;
       }
     }
-
-    &.@{selectPrefixCls}-focused {
-      .@{selectPrefixCls}-selection {
-        //border-color: #23c0fa;
-        border-color: #7700fa;
-        box-shadow: 0 0 2px fadeout(#2db7f5, 20%);
-      }
-    }
+    //focus的状态不需要了
+    // &.@{selectPrefixCls}-focused {
+    //   .@{selectPrefixCls}-selection {
+    //     //border-color: #23c0fa;
+    //     border-color: #7700fa;
+    //     box-shadow: 0 0 2px fadeout(#2db7f5, 20%);
+    //   }
+    // }
   }
 
 
 
   &-selection--single {
-    height: 28px;
+    height: 30px;
     cursor: pointer;
     position: relative;
 
@@ -101,22 +148,42 @@
       display: block;
       padding-left: 10px;
       padding-right: 20px;
-      line-height: 28px;
+      line-height: 30px;
     }
-
+    
     .@{selectPrefixCls}-selection-selected-value {
       display: block;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
-
+    //复写样式，清空按钮
+    // .@{selectPrefixCls}-selection__clear {
+    //   top: 0;
+    //   right: 20px;
+    //   line-height: 30px;
+    //   &:after {
+    //     content: '×';
+    //   }
+    // }
     .@{selectPrefixCls}-selection__clear {
-      top: 5px;
-      right: 20px;
-      &:after {
-        content: '×';
-      }
+      position: absolute;
+      top: 50%;
+      right: 8px;
+      z-index: 1;
+      display: inline-block;
+      margin-top: -6px;
+      color: rgba(0, 0, 0, 0.25);
+      font-size: 12px;
+      font-style: normal;
+      line-height: 12px;
+      text-align: center;
+      text-transform: none;
+      background: #fff;
+      cursor: pointer;
+      opacity: 0;
+      transition: color .3s ease,opacity .15s ease;
+      text-rendering: auto;
     }
   }
 
@@ -181,7 +248,7 @@
   }
 
   &-selection--multiple {
-    min-height: 28px;
+    min-height: 30px;
 
     .@{selectPrefixCls}-search--inline {
       width: auto;
@@ -211,38 +278,40 @@
     }
 
     .@{selectPrefixCls}-selection__clear {
-       top: 5px;
+       top: 0;
        right: 8px;
+       line-height: 30px;
+       color: rgba(0, 0, 0, 0.25);
      }
   }
 
   &-enabled {
     .@{selectPrefixCls}-selection__choice {
       cursor: default;
-      &:hover {
-        .@{selectPrefixCls}-selection__choice__remove {
-          opacity: 1;
-          transform: scale(1);
-        }
-        .@{selectPrefixCls}-selection__choice__remove +
-        .@{selectPrefixCls}-selection__choice__content {
-          margin-left: -8px;
-          margin-right: 8px;
-        }
-      }
+      //复写样式，删除默认展示
+      // &:hover {
+      //   .@{selectPrefixCls}-selection__choice__remove {
+      //     opacity: 1;
+      //     transform: scale(1);
+      //   }
+      //   .@{selectPrefixCls}-selection__choice__remove +
+      //   .@{selectPrefixCls}-selection__choice__content {
+      //     margin-left: -8px;
+      //     margin-right: 8px;
+      //   }
+      // }
     }
   }
 
   & &-selection__choice {
     background-color: #f3f3f3;
-    border-radius: 4px;
+    border-radius: 3px;
     float: left;
-    padding: 0 15px;
+    padding: 0 20px 0 10px;
     margin-right: 4px;
     position: relative;
     overflow: hidden;
     transition: padding .3s cubic-bezier(0.6, -0.28, 0.735, 0.045), width .3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
-
     &__content {
       margin-left: 0;
       margin-right: 0;
@@ -296,16 +365,14 @@
       font-weight: bold;
       padding: 0 0 0 8px;
       position: absolute;
-      opacity: 0;
-      transform: scale(0);
+      opacity: 1;
+      transform: scale(1);
       top: 0;
       right: 2px;
       transition: opacity .3s, transform .3s;
-
-      &:before {
-        content: '×'
-      }
-
+      // &:before {
+      //   content: '×'
+      // }
       &:hover {
         color: #333;
       }
@@ -367,9 +434,15 @@
         font-weight: normal;
         color: #666666;
         white-space: nowrap;
-
+        &:hover{
+          background-color: rgb(235, 236, 240);
+        }
         &-selected {
-          background-color: #ddd;
+          background-color: rgb(255, 247, 231);
+          color: rgb(245, 60, 50);
+          &:hover{
+            background-color: rgb(255, 247, 231);
+          }
         }
 
         &-active {
@@ -501,11 +574,22 @@
   }
 
   &-open {
-    .@{selectPrefixCls}-arrow:after {
-      border-color: transparent transparent #888 transparent;
-      border-width: 0 4px 5px 4px;
+    //复写按钮
+    // .@{selectPrefixCls}-arrow:after {
+    //   border-color: transparent transparent #888 transparent;
+    //   border-width: 0 4px 5px 4px;
+    // }
+    .@{selectPrefixCls}-arrow {
+        -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
+        -ms-transform: rotate(180deg);
+    }
+    .@{selectPrefixCls}-arrow:before {
+        -webkit-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        transform: rotate(180deg);
     }
   }
+
 
   &-not-found {
     display: inline-block;
@@ -533,4 +617,58 @@
       }
     }
   }
+}
+
+//choiceremover的操作
+
+.@{selectPrefixCls}-selection-choice-remove {
+  font-style: normal;
+  vertical-align: baseline;
+  text-align: center;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #999;
+  line-height: inherit;
+  cursor: pointer;
+  font-weight: bold;
+  -webkit-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  display: inline-block;
+  font-size: 12px;
+  font-size: 8px \9;
+  -webkit-transform: scale(0.66666667) rotate(0deg);
+    -ms-transform: scale(0.66666667) rotate(0deg);
+        transform: scale(0.66666667) rotate(0deg);
+  /* IE6-IE8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=1, M12=0, M21=0, M22=1)";
+  zoom: 1;
+  position: absolute;
+  right: 4px;
+  padding: 0 0 0 8px;
+  top: -4px;
+}
+.@{selectPrefixCls}-selection-choice-remove:before {
+  display: block;
+  font-family: "uf";
+}
+.@{selectPrefixCls}-selection-choice-remove {
+  -webkit-filter: none;
+  filter: none;
+}
+.@{selectPrefixCls}-selection-choice-remove {
+  font-size: 12px;
+  &-icon{
+    font-size: 12px;
+  }
+}
+.@{selectPrefixCls}-selection-choice-remove:hover {
+  color: #404040;
+}
+.@{selectPrefixCls}-selection-choice-remove:before {
+  font-family: 'uf';
+  content: "\e602";
 }

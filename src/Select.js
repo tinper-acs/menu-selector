@@ -28,6 +28,8 @@ import { selectorContextTypes } from './Base/BaseSelector';
 import { popupContextTypes } from './Base/BasePopup';
 import SingleSelector from './Selector/SingleSelector';
 import SinglePopup from './Popup/SinglePopup';
+import MultiplePopup from './Popup/MultiplePopup';
+import MultipleSelector, { multipleSelectorContextTypes } from './Selector/MultipleSelector';
 
 import Icon from 'bee-icon';
 import 'bee-icon/build/Icon.css';
@@ -84,7 +86,7 @@ class Select extends React.Component {
   static childContextTypes = {
     rcTreeSelect: PropTypes.shape({
       ...selectorContextTypes,
-      // ...multipleSelectorContextTypes,
+      ...multipleSelectorContextTypes,
       ...popupContextTypes,
 
       onSearchInputChange: PropTypes.func,
@@ -101,8 +103,8 @@ class Select extends React.Component {
     
     notFoundContent: 'Not Found',
 
-    clearIcon:<Icon className="u-select-selection-choice-remove-icon" type={' uf-close'}></Icon>,
-
+    clearIcon:<Icon className={`rc-tree-select-selection-choice-clear-icon`} type={' uf-close-c'}></Icon>,//是单选最后的X
+    removeIcon:<Icon className={`rc-tree-select-selection-choice-remove-icon`}type={' uf-close'}></Icon>, // 每项的关闭
     valueField:'label'
   };
 
@@ -219,9 +221,62 @@ class Select extends React.Component {
     }
     
   };
+  onMultipleSelectorRemove = (event, removerId,removeValue) => {
+    event.stopPropagation();
+    let {selectorValueMap}  = this.state;
+    delete selectorValueMap[removerId];
+    let checkedArray = [];
+    Object.keys(selectorValueMap).forEach(item => {
+      checkedArray.push(selectorValueMap[item])
+    });
+    this.setState({
+      selectorValueList:checkedArray,
+      selectorValueMap,
+    })
+  };
 
   // ==================== Popup =====================
-
+  /**
+	 * 多选状态下表格只能通过选择 checkbox 来选值，同时触发改方法
+	 * @function
+	 * 
+	 * @param record  当前操作的行数据
+   * @param status  当前操作的行数据是选中状态还是其他
+	 */
+  onMenuMultipleSelect = (record,status) =>{
+    if(!this.props.multiple) return;
+    let { valueField } = this.props;
+    let {selectorValueMap,selectorValueList} = this.state;
+		if(record){
+      //单条操作
+			if( !status && !selectorValueMap[record[valueField]] ){ 
+        let checkedArray =  selectorValueList;
+        let checkedMap = selectorValueMap;
+         checkedArray.push(record);
+         checkedMap[record[valueField]] = record;
+         this.setState({
+          selectorValueList:checkedArray,
+          selectorValueMap:checkedMap,
+         })
+	
+			}else if( status && selectorValueMap[record[valueField]] ){
+				delete selectorValueMap[record[valueField]];
+				let checkedArray = [];
+				Object.keys(selectorValueMap).forEach(item => {
+					checkedArray.push(selectorValueMap[item])
+        });
+        this.setState({
+          selectorValueList:checkedArray,
+          selectorValueMap,
+        })
+	
+			}
+		}
+  }
+  /**
+	 * 单击行选择该行数据，只在单选状态生效
+	 * @record {object} 该行数据
+	 */
   onMenuSelect = (record) =>{
     let { valueField = "label",multiple,onSelect } = this.props;
     if(!!multiple) return;
@@ -247,13 +302,9 @@ class Select extends React.Component {
       })
 
 		}
-   
     
   }
 
-  onMenuMultipleSelect = (item) =>{
-
-  }
   // ==================== Trigger =====================
 
   onDropdownVisibleChange = open => {
@@ -274,11 +325,16 @@ class Select extends React.Component {
 
   onSearchInputChange = ({ target: { value } }) => {
     const { onSearch } = this.props;
-
     if (onSearch) {
       onSearch(value);
     }
-    console.log(value)
+    if (!this.isSearchValueControlled()) {
+      this.setUncontrolledState({
+        searchValue: value,
+      });
+      this.setOpenState(true);
+    }
+  
     
   };
 
@@ -335,15 +391,18 @@ class Select extends React.Component {
       selectorValueMap,
       open,
       focused,
+      searchValue,
     } = this.state;
     const { 
       prefixCls,
       valueList,
       valueField,
+      multiple,
     } = this.props;
 
     const passProps = {
       ...this.props,
+      searchValue,
       valueList,
       selectorValueList,
       selectorValueMap,
@@ -355,7 +414,7 @@ class Select extends React.Component {
       valueField,
     };
 
-    const Popup = SinglePopup;
+    const Popup = multiple ? MultiplePopup : SinglePopup;
     const $popup = (
       <Popup
         ref={this.setPopupRef}
@@ -363,7 +422,7 @@ class Select extends React.Component {
       />
     );
 
-    const Selector = SingleSelector;
+    const Selector = multiple ? MultipleSelector : SingleSelector;
     const $selector = <Selector {...passProps} ref={this.selectorRef} />;
 
     return (
