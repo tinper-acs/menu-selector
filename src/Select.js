@@ -55,9 +55,9 @@ class Select extends React.Component {
 
     showSearch: PropTypes.bool,
     placeholder: PropTypes.node,
-    inputValue: PropTypes.string, // [Legacy] Deprecated. Use `searchValue` instead.
+    // inputValue: PropTypes.string, // [Legacy] Deprecated. Use `searchValue` instead.
     searchValue: PropTypes.string,
-    autoClearSearchValue: PropTypes.bool,
+    // autoClearSearchValue: PropTypes.bool,// [Legacy] Deprecated.
     searchPlaceholder: PropTypes.node, // [Legacy] Confuse with placeholder
     disabled: PropTypes.bool,
     children: PropTypes.node,
@@ -69,15 +69,15 @@ class Select extends React.Component {
     notFoundContent: PropTypes.node,
 
     onSearch: PropTypes.func,
-    onSelect: PropTypes.func,
-    onDeselect: PropTypes.func,
-    onChange: PropTypes.func,
+    onSelect: PropTypes.func,//Update state selectorValueList.
+    // onDeselect: PropTypes.func,// [Legacy] Deprecated.
+    // onChange: PropTypes.func,//Update state valueList. // [Legacy] Deprecated.
     onDropdownVisibleChange: PropTypes.func,
 
-    inputIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+    // inputIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),// [Legacy] Deprecated.
     clearIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
     removeIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-    switcherIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+    // switcherIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),// [Legacy] Deprecated.
 
 
     valueField: PropTypes.string,
@@ -99,7 +99,7 @@ class Select extends React.Component {
     prefixAria: 'rc-tree-select',
     showArrow: true,
     showSearch: true,
-    autoClearSearchValue: true,
+    // autoClearSearchValue: true,// [Legacy] Deprecated.
     
     notFoundContent: 'Not Found',
 
@@ -111,12 +111,13 @@ class Select extends React.Component {
   constructor(props) {
     super(props);
 
-    const { prefixAria, defaultOpen, open,value} = props;
+    const { prefixAria, defaultOpen, open,value,searchValue} = props;
 
     this.state = {
       open: open || defaultOpen,
       selectorValueList:!!value?[{"value":value}]: [],
       selectorValueMap:{},
+      searchValue:!!searchValue?searchValue:'',
       init: true,
     };
 
@@ -212,7 +213,7 @@ class Select extends React.Component {
       selectorValueList:[],
       selectorValueMap:{},
     },()=>{
-      onSelect([])
+      onSelect([],null)
     })
     if (!this.isSearchValueControlled()) {
       this.setUncontrolledState({
@@ -223,6 +224,7 @@ class Select extends React.Component {
   };
   onMultipleSelectorRemove = (event, removerId,removeValue) => {
     event.stopPropagation();
+    let {onSelect} = this.props;
     let {selectorValueMap}  = this.state;
     delete selectorValueMap[removerId];
     let checkedArray = [];
@@ -232,6 +234,8 @@ class Select extends React.Component {
     this.setState({
       selectorValueList:checkedArray,
       selectorValueMap,
+    },()=>{
+      onSelect(checkedArray,removerId)
     })
   };
 
@@ -287,7 +291,7 @@ class Select extends React.Component {
         selectorValueList:[],
         selectorValueMap:{},
       },()=>{
-        onSelect([])
+        onSelect([],null)
       })
 		}else{
       let checkedRecord = Object.assign({_checked: true}, record);
@@ -298,7 +302,7 @@ class Select extends React.Component {
         selectorValueList:checkedArray,
         selectorValueMap:checkedMap,
       },()=>{
-        onSelect(checkedArray)
+        onSelect(checkedArray,checkedRecord[valueField])
       })
 
 		}
@@ -324,6 +328,7 @@ class Select extends React.Component {
   };
 
   onSearchInputChange = ({ target: { value } }) => {
+    console.log('onSearchInputChange')
     const { onSearch } = this.props;
     if (onSearch) {
       onSearch(value);
@@ -332,10 +337,14 @@ class Select extends React.Component {
       this.setUncontrolledState({
         searchValue: value,
       });
-      this.setOpenState(true);
+      
+    }else{
+      this.setState({
+        searchValue: value,
+      });
     }
   
-    
+    this.setOpenState(true);
   };
 
   // [Legacy] Origin provide `documentClickClose` which triggered by `Trigger`
