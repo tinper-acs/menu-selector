@@ -21,7 +21,7 @@ class BasePopup extends React.Component {
   };
 
   getTree = () => {
-    return this.treeRef.current;
+    return this.menuRef.current;
   };
 
 

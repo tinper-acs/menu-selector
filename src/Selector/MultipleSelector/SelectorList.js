@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CSSMotionList from 'rc-animate/lib/CSSMotionList';
+// import CSSMotionList from 'rc-animate/lib/CSSMotionList';
 import Selection from './Selection';
 import SearchInput from '../../SearchInput';
 
@@ -70,18 +70,16 @@ const SelectorList = props => {
       type: NODE_SEARCH,
     });
   }
-
-  console.log('多选的seletorList', nodeKeys,myValueList)
   return (
-    <CSSMotionList
-      keys={nodeKeys}
+    <ul
+      // keys={nodeKeys}
       className={`${prefixCls}-selection__rendered`}
-      component="ul"
+      // component="ul"
       role="menubar"
-      motionName={choiceTransitionName}
-      onLeaveEnd={onChoiceAnimationLeave}
+      // motionName={choiceTransitionName}
+      // onLeaveEnd={onChoiceAnimationLeave}
     >
-      {({ type, label, value, disabled, className, style }) => {
+      {nodeKeys.map(({ type, label, value, disabled, className, style }) => {
         if (type === NODE_SELECTOR) {
           return (
             <Selection
@@ -96,12 +94,12 @@ const SelectorList = props => {
           );
         }
         return (
-          <li className={`${prefixCls}-search ${prefixCls}-search--inline`}>
+          <li key={type} className={`${prefixCls}-search ${prefixCls}-search--inline`}>
             <SearchInput {...props} ref={inputRef} needAlign />
           </li>
         );
-      }}
-    </CSSMotionList>
+      })}
+    </ul>
   );
 };
 

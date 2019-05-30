@@ -22,6 +22,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
+import raf from 'raf';
 import KeyCode from 'rc-util/lib/KeyCode';
 import SelectTrigger from './SelectTrigger';
 import { selectorContextTypes } from './Base/BaseSelector';
@@ -37,7 +38,8 @@ import 'bee-icon/build/Icon.css';
 import {
   createRef,
   generateAriaId,
-
+  formatInternalValue,
+  formatSelectorValue
 } from './util';
 import { valueProp } from './propTypes';
 class Select extends React.Component {
@@ -111,13 +113,13 @@ class Select extends React.Component {
   constructor(props) {
     super(props);
 
-    const { prefixAria, defaultOpen, open,value,searchValue} = props;
+    const { prefixAria, defaultOpen, open,} = props;
 
     this.state = {
       open: open || defaultOpen,
-      selectorValueList:!!value?[{"value":value}]: [],
+      selectorValueList:[],
       selectorValueMap:{},
-      searchValue:!!searchValue?searchValue:'',
+      searchValue:'',
       init: true,
     };
 
@@ -162,11 +164,41 @@ class Select extends React.Component {
       }
       return false;
     }
+    let valueRefresh = false;
     // Open
     processState('open', propValue => {
       newState.open = propValue;
     });
 
+    // Value List
+    if (prevState.init) {
+      processState('defaultValue', propValue => {
+        newState.valueList = formatInternalValue(propValue, nextProps);
+        valueRefresh = true;
+      });
+    }
+    processState('value', propValue => {
+      newState.valueList = formatInternalValue(propValue, nextProps);
+      valueRefresh = true;
+    });
+
+     // Selector Value List
+     if (valueRefresh) {
+      // Calculate the value list for `Selector` usage
+      newState.selectorValueList = formatSelectorValue(
+        newState.valueList,
+      );
+      let checkedMap = {};
+      newState.valueList.map(item=>{
+        checkedMap[item.value] = item;
+      })
+      newState.selectorValueMap = checkedMap;
+    }
+
+    // Search value
+    processState('searchValue', propValue => {
+      newState.searchValue = propValue;
+    });
     return newState;
   }
   componentDidMount() {
@@ -192,7 +224,6 @@ class Select extends React.Component {
   onComponentKeyDown = event => {
     const { open } = this.state;
     const { keyCode } = event;
-
     if (!open) {
       if ([KeyCode.ENTER, KeyCode.DOWN].indexOf(keyCode) !== -1) {
         this.setOpenState(true);
@@ -303,32 +334,18 @@ class Select extends React.Component {
         selectorValueMap:checkedMap,
       },()=>{
         onSelect(checkedArray,checkedRecord[valueField])
-      })
-
+      });
 		}
-    
   }
 
   // ==================== Trigger =====================
 
   onDropdownVisibleChange = open => {
-    const { multiple } = this.props;
-    const { searchValue } = this.state;
-
-    // When set open success and single mode,
-    // we will reset the input content.
-    if (open && !multiple && searchValue) {
-      this.setUncontrolledState({
-        searchValue: '',
-        // filteredTreeNodes: null,
-      });
-    }
-
+    console.log('onDropdownVisibleChange',open)
     this.setOpenState(open, true);
   };
 
   onSearchInputChange = ({ target: { value } }) => {
-    console.log('onSearchInputChange')
     const { onSearch } = this.props;
     if (onSearch) {
       onSearch(value);
@@ -346,6 +363,16 @@ class Select extends React.Component {
   
     this.setOpenState(true);
   };
+  onSearchInputKeyDown = event => {
+    const { searchValue,selectorValueList } = this.state;
+    const {multiple,valueField} = this.props;
+    const { keyCode } = event;
+
+    if (KeyCode.BACKSPACE === keyCode && multiple && !searchValue && selectorValueList.length) {
+      const lastValue = selectorValueList[selectorValueList.length - 1][valueField];
+      this.onMultipleSelectorRemove(event, lastValue);
+    }
+  };
 
   // [Legacy] Origin provide `documentClickClose` which triggered by `Trigger`
   // Currently `TreeSelect` align the hide popup logic as `Select` which blur to hide.
@@ -358,9 +385,19 @@ class Select extends React.Component {
     ) {
       return;
     }
+    console.log('setOpenState',open)
     this.setUncontrolledState({ open });
   };
 
+  onChoiceAnimationLeave = () => {
+    raf(() => {
+      this.forcePopupAlign();
+    });
+  };
+
+  setPopupRef = popup => {
+    this.popup = popup;
+  };
    /**
    * Only update the value which is not in props
    */
@@ -390,6 +427,14 @@ class Select extends React.Component {
     const { inputValue } = this.props;
     if ('searchValue' in this.props) return true;
     return 'inputValue' in this.props && inputValue !== null;
+  };
+
+  forcePopupAlign = () => {
+    const $trigger = this.selectTriggerRef.current;
+
+    if ($trigger) {
+      $trigger.forcePopupAlign();
+    }
   };
 
   // ===================== Render =====================

@@ -19,9 +19,9 @@ class Demo2 extends React.Component {
     searchValue: '1',
     value: 'test1',
     valueList:[
-      {label:'563',value:'test563'},
+      {label:'5623',value:'test5263'},
       {label:'563563',value:'test563563'},
-      {label:'563563563',value:'test563563563'}, 
+      {label:'test522263563',value:'test522263563'}, 
       {label:'563563563563',value:'test563563563563'},
       {label:'5631563563',value:'test5631563563'},
     ],
@@ -85,13 +85,11 @@ class Demo2 extends React.Component {
           transitionName="rc-tree-select-dropdown-slide-up"
           choiceTransitionName="rc-tree-select-selection__choice-zoom"
           dropdownStyle={{ maxHeight: 200, overflow: 'auto' }}
-          placeholder={<i>请下拉选择</i>}
+          placeholder={"请下拉选择"}
           searchPlaceholder="please search"
           multiple
-          value={multipleValue}
+          // value={multipleValue}
           valueList={valueList}
-          treeNodeFilterProp="title"
-          onChange={this.onMultipleChange}
           onSelect={this.onSelect}
           onSearch={this.onSearch}
           allowClear

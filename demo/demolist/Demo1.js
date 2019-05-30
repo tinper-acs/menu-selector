@@ -17,7 +17,7 @@ class Demo extends React.Component {
     tsOpen: false,
     visible: false,
     searchValue: '1',
-    value: 'test1',
+    value: '2',
     valueList:[{label:'2',value:'test2'},],
    
   };
@@ -77,12 +77,12 @@ class Demo extends React.Component {
           transitionName="rc-tree-select-dropdown-slide-up"
           choiceTransitionName="rc-tree-select-selection__choice-zoom"
           dropdownStyle={{ maxHeight: 200, overflow: 'auto' }}
-          placeholder={<i>请下拉选择</i>}
+          placeholder={<span>请下拉选择</span>}
           searchPlaceholder="please search"
           showSearch
           allowClear
           searchValue={searchValue}
-          value={value}
+          defaultValue={value}
           filterTreeNode={false}
           onSearch={this.onSearch}
           open={tsOpen}
