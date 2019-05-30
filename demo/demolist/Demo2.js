@@ -17,13 +17,13 @@ class Demo2 extends React.Component {
     tsOpen: false,
     visible: false,
     searchValue: '1',
-    value: 'test1',
+    value: 'v1',
     valueList:[
-      {label:'5623',value:'test5263'},
-      {label:'563563',value:'test563563'},
-      {label:'test522263563',value:'test522263563'}, 
-      {label:'563563563563',value:'test563563563563'},
-      {label:'5631563563',value:'test5631563563'},
+      {label:'5623',value:'v5263'},
+      {label:'563563',value:'v563563'},
+      {label:'v522263563',value:'v522263563'}, 
+      {label:'563563563563',value:'v563563563563'},
+      {label:'5631563563',value:'v5631563563'},
     ],
    
   };
@@ -32,19 +32,29 @@ class Demo2 extends React.Component {
     let valueList = [];
     if(value==='2'){
       valueList = [
-        {label:'2',value:'test2'},
-        {label:'22',value:'test22'},
-        {label:'222',value:'test222'}, 
-        {label:'2222',value:'test2222'},
-        {label:'22212',value:'test22212'},
+        {label:'2',value:'v2'},
+        {label:'22',value:'v22'},
+        {label:'222',value:'v222'}, 
+        {label:'2222',value:'v2222'},
+        {label:'22212',value:'v22212'},
+        {label:'98',value:'v98'},
+        {label:'9898',value:'v9898'},
+        {label:'989898',value:'v989898'}, 
+        {label:'98989898',value:'v98989898'},
+        {label:'989898198',value:'v989898198'},
+        {label:'78',value:'v78'},
+        {label:'7878',value:'v7878'},
+        {label:'787878',value:'v787878'}, 
+        {label:'78787878',value:'v78787878'},
+        {label:'787878178',value:'v787878178'},
       ]
     }else{
       valueList = [
-        {label:'3',value:'test3'},
-        {label:'33',value:'test33'},
-        {label:'333',value:'test333'}, 
-        {label:'3333',value:'test3333'},
-        {label:'3133',value:'test3133'},
+        {label:'3',value:'v3'},
+        {label:'33',value:'v33'},
+        {label:'333',value:'v333'}, 
+        {label:'3333',value:'v3333'},
+        {label:'3133',value:'v3133'},
       ]
     }
     this.setState({ searchValue: value,valueList });
@@ -88,6 +98,7 @@ class Demo2 extends React.Component {
           placeholder={"请下拉选择"}
           searchPlaceholder="please search"
           multiple
+          maxTagCount={3}
           // value={multipleValue}
           valueList={valueList}
           onSelect={this.onSelect}

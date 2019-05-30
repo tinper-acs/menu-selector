@@ -80,8 +80,7 @@ class Select extends React.Component {
     clearIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
     removeIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
     // switcherIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),// [Legacy] Deprecated.
-
-
+    
     valueField: PropTypes.string,
   };
 
@@ -155,7 +154,7 @@ class Select extends React.Component {
       prevProps: nextProps,
       init: false,
     };
-
+    
     // Process the state when props updated
     function processState(propName, updater) {
       if (prevProps[propName] !== nextProps[propName]) {
@@ -208,7 +207,7 @@ class Select extends React.Component {
       this.focus();
     }
   }
-
+  
   // ==================== Selector ====================
   onSelectorFocus = () => {
     this.setState({ focused: true});
@@ -430,6 +429,7 @@ class Select extends React.Component {
   };
 
   forcePopupAlign = () => {
+    console.log('forcePopupAlign')
     const $trigger = this.selectTriggerRef.current;
 
     if ($trigger) {
@@ -494,7 +494,7 @@ class Select extends React.Component {
 }
 
 // Let warning show correct component name
-Select.displayName = 'TreeSelect';
+Select.displayName = 'MenuSelect';
 
 polyfill(Select);
 

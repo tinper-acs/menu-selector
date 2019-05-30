@@ -18,7 +18,21 @@ class Demo extends React.Component {
     visible: false,
     searchValue: '1',
     value: '2',
-    valueList:[{label:'2',value:'test2'},],
+    valueList:[ {label:'2',value:'test2'},
+    {label:'22',value:'test22'},
+    {label:'222',value:'test222'}, 
+    {label:'2222',value:'test2222'},
+    {label:'22212',value:'test22212'},
+    {label:'98',value:'test98'},
+    {label:'9898',value:'test9898'},
+    {label:'989898',value:'test989898'}, 
+    {label:'98989898',value:'test98989898'},
+    {label:'989898198',value:'test989898198'},
+    {label:'78',value:'test78'},
+    {label:'7878',value:'test7878'},
+    {label:'787878',value:'test787878'}, 
+    {label:'78787878',value:'test78787878'},
+    {label:'787878178',value:'test787878178'},],
    
   };
   onSearch = (value, ...args) => {
