@@ -25,6 +25,7 @@ class Demo2 extends React.Component {
       {label:'563563563563',value:'v563563563563'},
       {label:'5631563563',value:'v5631563563'},
     ],
+    currPageIndex:1,
    
   };
   onSearch = (value, ...args) => {
@@ -61,12 +62,12 @@ class Demo2 extends React.Component {
   };
 
   onChange = (value, ...rest) => {
-    console.log('onChange', value, ...rest);
+    // console.log('onChange', value, ...rest);
     this.setState({ value });
   };
 
   onMultipleChange = value => {
-    console.log('onMultipleChange', value);
+    // console.log('onMultipleChange', value);
     this.setState({ multipleValue: value });
   };
 
@@ -77,7 +78,14 @@ class Demo2 extends React.Component {
     })
   };
 
-
+  onPaginationSelect=(index)=>{
+    this.setState({
+      currPageIndex:index,
+      valueList : [
+        {label:'3page',value:'v3page'},
+      ]
+    })
+  }
   render() {
     const {
       value,
@@ -99,11 +107,16 @@ class Demo2 extends React.Component {
           searchPlaceholder="please search"
           multiple
           maxTagCount={3}
-          // value={multipleValue}
           valueList={valueList}
           onSelect={this.onSelect}
           onSearch={this.onSearch}
           allowClear
+          showMenuIcon
+
+          onPaginationSelect={this.onPaginationSelect}
+          pageCount={10}
+          totalElements={92}
+          currPageIndex={this.state.currPageIndex}
         />
       </div>
     );

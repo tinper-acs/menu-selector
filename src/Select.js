@@ -82,6 +82,11 @@ class Select extends React.Component {
     // switcherIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),// [Legacy] Deprecated.
     
     valueField: PropTypes.string,
+    pageCount: PropTypes.number,
+    totalElements: PropTypes.number,
+    currPageIndex: PropTypes.number,
+    onPaginationSelect:PropTypes.func,
+    onMenuClick:PropTypes.func,
   };
 
   static childContextTypes = {
@@ -106,7 +111,12 @@ class Select extends React.Component {
 
     clearIcon:<Icon className={`rc-tree-select-selection-choice-clear-icon`} type={' uf-close-c'}></Icon>,//是单选最后的X
     removeIcon:<Icon className={`rc-tree-select-selection-choice-remove-icon`}type={' uf-close'}></Icon>, // 每项的关闭
-    valueField:'label'
+    menuIcon:<Icon className={`rc-tree-select-selection-menu-icon`}type={' uf-navmenu'}></Icon>, // 每项的关闭
+    valueField:'label',
+    pageCount:0,
+    totalElements:0,
+    currPageIndex:0,
+    onPaginationSelect:()=>{}
   };
 
   constructor(props) {
@@ -137,6 +147,7 @@ class Select extends React.Component {
         onSelectorBlur: this.onSelectorBlur,
         onSelectorKeyDown: this.onComponentKeyDown,
         onSelectorClear: this.onSelectorClear,
+        onSelectorMenu: this.onSelectorMenu,//新增menu点击
         onMultipleSelectorRemove: this.onMultipleSelectorRemove,
 
         onPopupKeyDown: this.onComponentKeyDown,
@@ -234,7 +245,10 @@ class Select extends React.Component {
       event.stopPropagation();
     }
   };
+  onSelectorMenu = event =>{
+    event.stopPropagation();
 
+  }
   onSelectorClear = event => {
     event.stopPropagation();
     const { disabled,onSelect } = this.props;
@@ -436,6 +450,15 @@ class Select extends React.Component {
       $trigger.forcePopupAlign();
     }
   };
+
+  focus() {
+    this.selectorRef.current.focus();
+  }
+
+  blur() {
+    this.selectorRef.current.blur();
+  }
+
 
   // ===================== Render =====================
 

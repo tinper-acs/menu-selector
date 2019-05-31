@@ -36,6 +36,7 @@ export const selectorContextTypes = {
   onSelectorBlur: PropTypes.func.isRequired,
   onSelectorKeyDown: PropTypes.func.isRequired,
   onSelectorClear: PropTypes.func.isRequired,
+  onSelectorMenu: PropTypes.func.isRequired,
 };
 
 export default function (modeName) {
@@ -135,6 +136,25 @@ export default function (modeName) {
         </span>
       );
     }
+    renderMenuIcon() {
+      const { prefixCls, showMenuIcon, menuIcon } = this.props;
+      const { rcTreeSelect: { onSelectorMenu } } = this.context;
+      if (!showMenuIcon) {
+        return null;
+      }
+
+      return (
+        <span
+          key="menuIcon"
+          className={`${prefixCls}-menu-icon`}
+          style={{ outline: 'none' }}
+          onClick={onSelectorMenu}
+        >
+          {typeof menuIcon === 'function' ?
+            React.createElement(menuIcon, { ...this.props }) : menuIcon}
+        </span>
+      );
+    }
 
     render() {
       const {
@@ -188,8 +208,8 @@ export default function (modeName) {
           >
             {renderSelection()}
             {this.renderClear()}
-            {this.renderArrow()}
-
+            {/* {this.renderArrow()} */}
+            {this.renderMenuIcon()}
             {renderPlaceholder && renderPlaceholder()}
           </span>
         </span>

@@ -33,6 +33,7 @@ class Demo extends React.Component {
     {label:'787878',value:'test787878'}, 
     {label:'78787878',value:'test78787878'},
     {label:'787878178',value:'test787878178'},],
+    currPageIndex:1,
    
   };
   onSearch = (value, ...args) => {
@@ -71,11 +72,19 @@ class Demo extends React.Component {
   onSelect = (item) => {
     // use onChange instead
     this.setState({
-      value:item.length === 0 ? '':item[0].value
+      value:item.length === 0 ? '':item[0].value,
+      
     })
   };
 
-
+  onPaginationSelect=(index)=>{
+    this.setState({
+      currPageIndex:index,
+      valueList : [
+        {label:'3page',value:'v3page'},
+      ]
+    })
+  }
   render() {
     const {
       value,
@@ -101,27 +110,20 @@ class Demo extends React.Component {
           onSearch={this.onSearch}
           open={tsOpen}
           valueList={valueList}
-          onChange={(val, ...args) => {
-            console.log('onChange', val, ...args);
-            if (val === 'test1') {
-              this.setState({ tsOpen: true });
-            } else {
-              this.setState({ tsOpen: false });
-            }
-            this.setState({ value: val });
-          }}
+          showMenuIcon
           onDropdownVisibleChange={(v, info) => {
-            console.log('single onDropdownVisibleChange', v, info);
+            // console.log('single onDropdownVisibleChange', v, info);
             // document clicked
-            if (info.documentClickClose && value === 'test1') {
-              return false;
-            }
             this.setState({
               tsOpen: v,
             });
             return true;
           }}
           onSelect={this.onSelect}
+          onPaginationSelect={this.onPaginationSelect}
+          pageCount={0}
+          totalElements={92}
+          currPageIndex={this.state.currPageIndex}
         />
       </div>
     );

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import { createRef } from '../util';
+import Pagination from 'bee-pagination';
 
 export const popupContextTypes = {
   onPopupKeyDown: PropTypes.func.isRequired,
@@ -30,7 +31,19 @@ class BasePopup extends React.Component {
 
     return <span className={`${prefixCls}-not-found`}>{notFoundContent}</span>;
   };
-
+  
+  onItemClick = (event,item,_checked) =>{
+   const {multiple} = this.props;
+   const {
+      rcTreeSelect: {onMenuSelect,onMenuMultipleSelect},
+    } = this.context;
+    if(multiple){
+      onMenuMultipleSelect(item,_checked)
+    }else{
+      onMenuSelect(item,_checked)
+    }
+    
+  }
   render() {
     const {
       prefixCls,
@@ -40,17 +53,15 @@ class BasePopup extends React.Component {
       valueList,
       menuProps,
       selectorValueMap,
-      valueField
+      valueField,
+      pageCount,
+      totalElements,
+      currPageIndex,
+      onPaginationSelect
     } = this.props;
     const {
       rcTreeSelect: { onPopupKeyDown,onMenuSelect,onMenuMultipleSelect},
     } = this.context;
-    // let menuItemProps = {};
-    // if(multiple){
-    //   menuItemProps.onSelect = onMenuMultipleSelect;
-    // }else{
-    //   menuItemProps.onClick = onMenuSelect
-    // }
     let $notFound,$cloneMenuItems=[];
     if (!valueList || !valueList.length) {
       $notFound = this.renderNotFound();
@@ -64,7 +75,7 @@ class BasePopup extends React.Component {
             className={`${prefixCls}-dropdown-menu-item ${_checked?`${prefixCls}-dropdown-menu-item-selected`:``}`}
             key={item[valueField]} 
             // value={JSON.stringify(item)} 
-            onClick={multiple?()=>{onMenuMultipleSelect(item,_checked)}:()=>{onMenuSelect(item,_checked)}}
+            onClick={(e)=>this.onItemClick(e,item,_checked)}
             >
               {item.value || item[valueField]}  
             </li>
@@ -92,6 +103,23 @@ class BasePopup extends React.Component {
       <div role="listbox" id={ariaId} onKeyDown={onPopupKeyDown} tabIndex={-1}>
         {renderSearch ? renderSearch() : null}
         {$content}
+        {
+          !!pageCount && 
+          <Pagination
+            first
+            last
+            prev
+            next
+            boundaryLinks
+            maxButtons={3}
+            items={pageCount}
+            total={totalElements}
+            activePage={currPageIndex}
+            onSelect={onPaginationSelect}
+            >
+          </Pagination>
+        }
+        
       </div>
     );
   }
