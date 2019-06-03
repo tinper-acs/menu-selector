@@ -46,7 +46,7 @@ class BasePopup extends React.Component {
   }
   render() {
     const {
-      prefixCls,
+      dropdownPrefixCls,
       multiple,
       ariaId,
       renderSearch,
@@ -81,7 +81,7 @@ class BasePopup extends React.Component {
             <li 
             role="option" 
             unselectable="on" 
-            className={`${prefixCls}-dropdown-menu-item ${_checked?`${prefixCls}-dropdown-menu-item-selected`:``}`}
+            className={`${dropdownPrefixCls}-menu-item ${_checked?`${dropdownPrefixCls}-menu-item-selected`:``}`}
             key={item[valueField]} 
             // value={JSON.stringify(item)} 
             onClick={(e)=>this.onItemClick(e,item,_checked)}
@@ -102,7 +102,7 @@ class BasePopup extends React.Component {
           {...menuProps}
           style={this.props.dropdownMenuStyle}
           role="listbox"
-          className={`${prefixCls}-dropdown-menu ${prefixCls}-dropdown-menu-root`}
+          className={`${dropdownPrefixCls}-menu ${dropdownPrefixCls}-menu-root`}
         >
           {$cloneMenuItems}
         </ul>
@@ -115,19 +115,21 @@ class BasePopup extends React.Component {
         {$content}
         {
           !!pageCount && 
-          <Pagination
-            first
-            last
-            prev
-            next
-            boundaryLinks
-            maxButtons={3}
-            items={pageCount}
-            total={totalElements}
-            activePage={currPageIndex}
-            onSelect={onPaginationSelect}
-            >
-          </Pagination>
+          <div className={`${dropdownPrefixCls}-pagination`}>
+            <Pagination
+              first
+              last
+              prev
+              next
+              boundaryLinks
+              maxButtons={3}
+              items={pageCount}
+              total={totalElements}
+              activePage={currPageIndex}
+              onSelect={onPaginationSelect}
+              >
+            </Pagination>
+          </div>
         }
         
       </div>

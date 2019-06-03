@@ -24,6 +24,7 @@ import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import raf from 'raf';
 import KeyCode from 'rc-util/lib/KeyCode';
+import Icon from 'bee-icon';
 import SelectTrigger from './SelectTrigger';
 import { selectorContextTypes } from './Base/BaseSelector';
 import { popupContextTypes } from './Base/BasePopup';
@@ -31,10 +32,6 @@ import SingleSelector from './Selector/SingleSelector';
 import SinglePopup from './Popup/SinglePopup';
 import MultiplePopup from './Popup/MultiplePopup';
 import MultipleSelector, { multipleSelectorContextTypes } from './Selector/MultipleSelector';
-
-import Icon from 'bee-icon';
-import 'bee-icon/build/Icon.css';
-
 import {
   createRef,
   generateAriaId,
@@ -118,7 +115,7 @@ class Select extends React.Component {
     menuIcon:<Icon className={`rc-tree-select-selection-menu-icon`}type={' uf-navmenu'}></Icon>, // 每项的关闭
     
     valueList:[],
-    valueField:'label',
+    valueField:'refpk',
     pageCount:0,
     totalElements:0,
     currPageIndex:0,
@@ -194,14 +191,12 @@ class Select extends React.Component {
     if (prevState.init) {
       processState('defaultValue', propValue => {
         // newState.valueList = formatInternalValue(propValue, nextProps);
-        ;
         newState.value = refValParse(propValue, nextProps);
         valueRefresh = true;
       });
     }
     processState('value', propValue => {
       // newState.valueList = formatInternalValue(propValue, nextProps);
-      ;
       newState.value = refValParse(propValue, nextProps);//拆成对象
       valueRefresh = true;
     });
@@ -262,9 +257,28 @@ class Select extends React.Component {
       event.stopPropagation();
     }
   };
+
+  /**
+   * 添加navmenu操作
+   */
   onSelectorMenu = event =>{
     event.stopPropagation();
     this.props.onMenuClick();
+
+  }
+  /**
+   * @msg: selector的值改变
+   * @param {type} 
+   * status:false删除，true新增，
+   * id:当前操作节点的id，
+   * item当前操作节点的完整数据（valueList取）;
+   * selectedArray当前popup选中的节点数组
+   * @return: 
+   */
+  triggerChange = (status,id,item,selectedArray,) =>{
+    let {onSelect} = this.props;
+    onSelect(status,id,item,selectedArray)
+    // console.log(status,id,item,selectedArray)
 
   }
   onSelectorClear = event => {
@@ -275,7 +289,7 @@ class Select extends React.Component {
       selectorValueList:[],
       selectorValueMap:{},
     },()=>{
-      onSelect([],null)
+      this.triggerChange(false,null,null,[])
     })
     if (!this.isSearchValueControlled()) {
       this.setUncontrolledState({
@@ -286,8 +300,8 @@ class Select extends React.Component {
   };
   onMultipleSelectorRemove = (event, removerId,removeValue) => {
     event.stopPropagation();
-    let {onSelect} = this.props;
     let {selectorValueMap}  = this.state;
+    let currentItem = selectorValueMap[removerId];
     delete selectorValueMap[removerId];
     let checkedArray = [];
     Object.keys(selectorValueMap).forEach(item => {
@@ -297,7 +311,7 @@ class Select extends React.Component {
       selectorValueList:checkedArray,
       selectorValueMap,
     },()=>{
-      onSelect(checkedArray,removerId)
+      this.triggerChange(false,removerId,currentItem,checkedArray)
     })
   };
 
@@ -314,7 +328,7 @@ class Select extends React.Component {
     let { valueField } = this.props;
     let {selectorValueMap,selectorValueList} = this.state;
 		if(record){
-      //单条操作
+      //添加
 			if( !status && !selectorValueMap[record[valueField]] ){ 
         let checkedArray =  selectorValueList;
         let checkedMap = selectorValueMap;
@@ -326,6 +340,7 @@ class Select extends React.Component {
          })
 	
 			}else if( status && selectorValueMap[record[valueField]] ){
+        //删除
 				delete selectorValueMap[record[valueField]];
 				let checkedArray = [];
 				Object.keys(selectorValueMap).forEach(item => {
@@ -335,8 +350,9 @@ class Select extends React.Component {
           selectorValueList:checkedArray,
           selectorValueMap,
         })
-	
-			}
+      }
+      this.triggerChange(!status,record[valueField],record,this.state.selectorValueList)
+
 		}
   }
   /**
@@ -344,7 +360,7 @@ class Select extends React.Component {
 	 * @record {object} 该行数据
 	 */
   onMenuSelect = (record) =>{
-    let { valueField = "label",multiple,onSelect } = this.props;
+    let { valueField ,multiple,onSelect } = this.props;
     if(!!multiple) return;
     let {selectorValueMap={}} = this.state;
 		//点击同一行数据时取消选择
@@ -353,7 +369,7 @@ class Select extends React.Component {
         selectorValueList:[],
         selectorValueMap:{},
       },()=>{
-        onSelect([],null)
+        this.triggerChange(false,record[valueField],record,[]);
       })
 		}else{
       let checkedRecord = Object.assign({_checked: true}, record);
@@ -364,7 +380,7 @@ class Select extends React.Component {
         selectorValueList:checkedArray,
         selectorValueMap:checkedMap,
       },()=>{
-        onSelect(checkedArray,checkedRecord[valueField])
+        this.triggerChange(true,record[valueField],record,checkedArray)
       });
 		}
   }
@@ -416,7 +432,6 @@ class Select extends React.Component {
     ) {
       return;
     }
-    console.log('setOpenState',open)
     this.setUncontrolledState({ open });
   };
 

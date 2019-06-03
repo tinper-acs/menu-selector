@@ -1,4 +1,5 @@
 @import '~bee-pagination/build/Pagination.css';
+@import '~bee-icon/build/Icon.css';
 @selectPrefixCls: rc-tree-select;
 
 .effect() {
@@ -395,7 +396,9 @@
     //border-top-right-radius: 0;
     position: absolute;
     outline: none;
-
+    &>div{
+      outline: none;
+    }
     &-hidden {
       display: none;
     }
@@ -465,6 +468,14 @@
           background-color: #e5e5e5;
           line-height: 0;
         }
+      }
+    }
+
+    //新增分页
+    &-pagination{
+      text-align:center;
+      .u-pagination-list{
+        padding-left: 0;
       }
     }
 
