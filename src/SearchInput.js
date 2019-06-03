@@ -48,9 +48,9 @@ class SearchInput extends React.Component {
       this.focus(true);
     }
   }
-
+  
   componentDidUpdate(prevProps) {
-    const { open, searchValue, needAlign } = this.props;
+    const { open, searchValue, needAlign,focus } = this.props;
 
     if (open && prevProps.open !== open) {
       this.focus();

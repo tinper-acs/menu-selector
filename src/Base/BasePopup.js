@@ -59,6 +59,7 @@ class BasePopup extends React.Component {
       currPageIndex,
       onPaginationSelect,
       displayField,
+      topPagination,
     } = this.props;
     const {
       rcTreeSelect: { onPopupKeyDown,onMenuSelect,onMenuMultipleSelect},
@@ -112,7 +113,7 @@ class BasePopup extends React.Component {
     return (
       <div role="listbox" id={ariaId} onKeyDown={onPopupKeyDown} tabIndex={-1}>
         {renderSearch ? renderSearch() : null}
-        {$content}
+        {!topPagination && $content}
         {
           !!pageCount && 
           <div className={`${dropdownPrefixCls}-pagination`}>
@@ -131,6 +132,7 @@ class BasePopup extends React.Component {
             </Pagination>
           </div>
         }
+         {topPagination && $content}
         
       </div>
     );

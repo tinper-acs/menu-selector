@@ -88,6 +88,7 @@ class Select extends React.Component {
     onMenuClick:PropTypes.func,
     inputDisplay: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),//新增input框的展示方式
     displayField: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),//下拉列表的展示
+    topPagination:PropTypes.bool,
   };
 
   static childContextTypes = {
@@ -122,7 +123,8 @@ class Select extends React.Component {
     onPaginationSelect:()=>{},
     onMenuClick:()=>{},
     inputDisplay:'{refname}' ,
-    displayField:'{refname}'
+    displayField:'{refname}',
+    topPagination:false,//分页在content上面
   };
 
   constructor(props) {
@@ -278,7 +280,6 @@ class Select extends React.Component {
   triggerChange = (status,id,item,selectedArray,) =>{
     let {onSelect} = this.props;
     onSelect(status,id,item,selectedArray)
-    // console.log(status,id,item,selectedArray)
 
   }
   onSelectorClear = event => {
@@ -388,7 +389,6 @@ class Select extends React.Component {
   // ==================== Trigger =====================
 
   onDropdownVisibleChange = open => {
-    console.log('onDropdownVisibleChange',open)
     this.setOpenState(open, true);
   };
 
@@ -476,7 +476,6 @@ class Select extends React.Component {
   };
 
   forcePopupAlign = () => {
-    console.log('forcePopupAlign')
     const $trigger = this.selectTriggerRef.current;
 
     if ($trigger) {

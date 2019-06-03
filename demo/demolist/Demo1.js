@@ -135,9 +135,10 @@ class Demo extends React.Component {
           }}
           onSelect={this.onSelect}
           onPaginationSelect={this.onPaginationSelect}
-          pageCount={0}
+          pageCount={1}
           totalElements={92}
           currPageIndex={this.state.currPageIndex}
+          topPagination
         />
       </div>
     );

@@ -17,10 +17,9 @@ class Selection extends React.Component {
   };
 
   onRemove = event => {
+    event.stopPropagation();
     const { onRemove, value,label } = this.props;
     onRemove(event, label,value);
-
-    event.stopPropagation();
   };
 
   render() {
@@ -48,6 +47,7 @@ class Selection extends React.Component {
         className={classNames(`${prefixCls}-selection__choice`, className)}
         title={toTitle(label)}
       >
+        <span className={`${prefixCls}-selection__choice__content`}>{content}</span>
         {onRemove && (
           <span className={`${prefixCls}-selection__choice__remove`} onClick={this.onRemove}>
             {typeof removeIcon === 'function'
@@ -55,7 +55,6 @@ class Selection extends React.Component {
               : removeIcon}
           </span>
         )}
-        <span className={`${prefixCls}-selection__choice__content`}>{content}</span>
       </li>
     );
   }
