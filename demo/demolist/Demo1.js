@@ -17,7 +17,7 @@ class Demo extends React.Component {
     tsOpen: false,
     visible: false,
     searchValue: '1',
-    value: '2',
+    value: '{"refname":"test2","refpk":"2"}',
     valueList:[ {label:'2',value:'test2'},
     {label:'22',value:'test22'},
     {label:'222',value:'test222'}, 
@@ -110,6 +110,14 @@ class Demo extends React.Component {
           onSearch={this.onSearch}
           open={tsOpen}
           valueList={valueList}
+          valueField={'label'}
+          displayField={(record)=>{
+            if(record.value){
+              return <div > <Icon type="uf-personin-o" style={{ color: 'red' }} /> {record.value}-{record.label}-{record.type}</div>
+            }else{
+              return record.refname
+            }
+          }}
           showMenuIcon
           onDropdownVisibleChange={(v, info) => {
             // console.log('single onDropdownVisibleChange', v, info);

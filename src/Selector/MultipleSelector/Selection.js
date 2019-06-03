@@ -35,7 +35,7 @@ class Selection extends React.Component {
       removeIcon,
     } = this.props;
 
-    let content = label || value;
+    let content = value || label;
     if (maxTagTextLength && typeof content === 'string' && content.length > maxTagTextLength) {
       content = `${content.slice(0, maxTagTextLength)}...`;
     }

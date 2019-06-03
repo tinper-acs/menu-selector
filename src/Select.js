@@ -39,6 +39,7 @@ import {
   createRef,
   generateAriaId,
   formatInternalValue,
+  refValParse,
   formatSelectorValue
 } from './util';
 import { valueProp } from './propTypes';
@@ -87,6 +88,7 @@ class Select extends React.Component {
     currPageIndex: PropTypes.number,
     onPaginationSelect:PropTypes.func,
     onMenuClick:PropTypes.func,
+    inputDisplay: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),//新增input框的展示方式
   };
 
   static childContextTypes = {
@@ -116,7 +118,9 @@ class Select extends React.Component {
     pageCount:0,
     totalElements:0,
     currPageIndex:0,
-    onPaginationSelect:()=>{}
+    onPaginationSelect:()=>{},
+    onMenuClick:()=>{},
+    inputDisplay:(record)=>{return `${record.value}-${record.label}`} ,
   };
 
   constructor(props) {
@@ -129,6 +133,7 @@ class Select extends React.Component {
       selectorValueList:[],
       selectorValueMap:{},
       searchValue:'',
+      value:'',//接收value
       init: true,
     };
 
@@ -180,29 +185,36 @@ class Select extends React.Component {
       newState.open = propValue;
     });
 
-    // Value List
+    // Value change
     if (prevState.init) {
       processState('defaultValue', propValue => {
-        newState.valueList = formatInternalValue(propValue, nextProps);
+        // newState.valueList = formatInternalValue(propValue, nextProps);
+        ;
+        newState.value = refValParse(propValue, nextProps);
         valueRefresh = true;
       });
     }
     processState('value', propValue => {
-      newState.valueList = formatInternalValue(propValue, nextProps);
+      // newState.valueList = formatInternalValue(propValue, nextProps);
+      ;
+      newState.value = refValParse(propValue, nextProps);//拆成对象
       valueRefresh = true;
     });
 
      // Selector Value List
      if (valueRefresh) {
       // Calculate the value list for `Selector` usage
-      newState.selectorValueList = formatSelectorValue(
-        newState.valueList,
-      );
-      let checkedMap = {};
-      newState.valueList.map(item=>{
-        checkedMap[item.value] = item;
-      })
-      newState.selectorValueMap = checkedMap;
+      if(!newState.value){
+        newState.selectorValueList =[]
+        newState.selectorValueMap = {};
+      }else{
+        let {selectorValueList,selectorValueMap} =  formatInternalValue(
+          newState.value,
+        );// 考虑多选
+        newState.selectorValueList =selectorValueList
+        newState.selectorValueMap = selectorValueMap;
+      }
+      
     }
 
     // Search value
@@ -247,6 +259,7 @@ class Select extends React.Component {
   };
   onSelectorMenu = event =>{
     event.stopPropagation();
+    onMenuClick();
 
   }
   onSelectorClear = event => {
@@ -474,6 +487,7 @@ class Select extends React.Component {
       prefixCls,
       valueList,
       valueField,
+      inputDisplay,
       multiple,
     } = this.props;
 
@@ -489,6 +503,7 @@ class Select extends React.Component {
       dropdownPrefixCls: `${prefixCls}-dropdown`,
       ariaId: this.ariaId,
       valueField,
+      inputDisplay
     };
 
     const Popup = multiple ? MultiplePopup : SinglePopup;

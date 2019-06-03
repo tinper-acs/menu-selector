@@ -17,7 +17,7 @@ class Demo2 extends React.Component {
     tsOpen: false,
     visible: false,
     searchValue: '1',
-    value: 'v1',
+    value: '{"refname":"v563563563563,v5263","refpk":"563563563563,5623"}',
     valueList:[
       {label:'5623',value:'v5263'},
       {label:'563563',value:'v563563'},
@@ -71,10 +71,20 @@ class Demo2 extends React.Component {
     this.setState({ multipleValue: value });
   };
 
-  onSelect = (item) => {
-    // use onChange instead
+  onSelect = (arr) => {
+    if(arr.length === 0 ) {
+      this.setState({
+        value:null
+      })
+      return false
+    }
+    let value = [],id=[];
+    arr.forEach(item=>{
+      value.push(item.refname || item.value);
+      id.push(item.refpk || item.label);
+    });
     this.setState({
-      value:item.length === 0 ? '':item[0].value
+      value:`{"refname":${JSON.stringify(value.join())},"refpk":${JSON.stringify(id.join())}}`
     })
   };
 
@@ -112,11 +122,12 @@ class Demo2 extends React.Component {
           onSearch={this.onSearch}
           allowClear
           showMenuIcon
-
+          value={this.state.value}
           onPaginationSelect={this.onPaginationSelect}
           pageCount={10}
           totalElements={92}
           currPageIndex={this.state.currPageIndex}
+          onSelect={this.onSelect}
         />
       </div>
     );

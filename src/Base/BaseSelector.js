@@ -10,7 +10,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
-import { createRef } from '../util';
+import { createRef,formatDisplayValue } from '../util';
 
 export const selectorPropTypes = {
   prefixCls: PropTypes.string,
@@ -100,10 +100,10 @@ export default function (modeName) {
     }
 
     renderClear() {
-      const { prefixCls, allowClear, selectorValueList, clearIcon } = this.props;
+      const { prefixCls, allowClear, selectorValueList, clearIcon,inputDisplay } = this.props;
       const { rcTreeSelect: { onSelectorClear } } = this.context;
 
-      if (!allowClear || !selectorValueList.length || !selectorValueList[0].value) {
+      if (!allowClear || !selectorValueList.length || !formatDisplayValue(selectorValueList[0],inputDisplay)) {
         return null;
       }
 

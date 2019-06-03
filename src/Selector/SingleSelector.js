@@ -1,6 +1,6 @@
 import React from 'react';
 import generateSelector, { selectorPropTypes } from '../Base/BaseSelector';
-import { toTitle, createRef } from '../util';
+import { toTitle, createRef,formatDisplayValue } from '../util';
 
 const Selector = generateSelector('single'); //来自BaseSelector
 
@@ -23,19 +23,19 @@ class SingleSelector extends React.Component {
   };
 
   renderSelection = () => {
-    const { selectorValueList, placeholder, prefixCls } = this.props;
+    const { selectorValueList, placeholder, prefixCls,inputDisplay } = this.props;
 
     let innerNode;
 
     if (selectorValueList.length) {
-      const { label, value } = selectorValueList[0];
+      const displayVal = formatDisplayValue(selectorValueList[0],inputDisplay)
       innerNode = (
         <span
           key="value"
-          title={toTitle(label)}
+          title={toTitle(displayVal)}
           className={`${prefixCls}-selection-selected-value`}
         >
-          {value || label}
+          {displayVal || ''}
         </span>
       );
     } else {

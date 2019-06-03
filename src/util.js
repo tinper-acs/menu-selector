@@ -1,5 +1,5 @@
 
-
+import warning from 'warning';
 // =================== MISC ====================
 export function toTitle(title) {
   if (typeof title === 'string') {
@@ -49,31 +49,56 @@ export const UNSELECTABLE_ATTRIBUTE = {
 
 
 // =================== Value ===================
-/**
- * Convert value to array format to make logic simplify.
- */
-export function formatInternalValue(value, props) {
-  const valueList = toArray(value);
-
-  // Parse label in value
-  if (isLabelInValue(props)) {
-    return valueList.map(val => {
-      if (typeof val !== 'object' || !val) {
-        return {
-          value: '',
-          label: '',
-        };
-      }
-
-      return val;
-    });
+export function refValParse (value){
+  if(!value){
+    warning(
+      false,
+      `value or defaultValue cant not be empty`,
+    );
+    return null;
   }
-
-  return valueList.map(val => ({
-    value: val,
-  }));
+  try{
+      let valueMap = JSON.parse(value);
+      if(!valueMap.hasOwnProperty('refname') || !valueMap.hasOwnProperty('refpk')){
+        warning(
+          false,
+          `value or defaultValue not contains refname or refpk`,
+        );
+        return null;
+      }else{
+          return JSON.parse(value);
+      }
+  }catch(e) {
+      return null;
+  }
 }
-
+export function formatInternalValue (ObjectVal) {
+  let valueList  = ObjectVal.refname.split(',');
+  let idList = ObjectVal.refpk.split(',');
+  if(valueList.length !== idList.length ){
+    warning(
+      false,
+      `value or defaultValue doesnt contains same length`,
+    );
+  }else{
+    let selectorValueList = [],selectorValueMap={};
+    valueList.forEach((value,index)=>{
+      selectorValueList.push({refname:value,refpk:idList[index]});
+      selectorValueMap[idList[index]] = {refname:value,refpk:idList[index]};
+    });
+    return {selectorValueList,selectorValueMap}
+  }
+}
+export function formatDisplayValue(item,inputDisplay) {
+  if(item.refname){ //为了匹配value的值
+    return item.refname;
+  }
+  if (typeof inputDisplay === 'function') {
+     return inputDisplay(item)
+  }else{
+    return inputDisplay.format(item)
+  }
+}
 export function getRefname(wrappedValue) {
   if (wrappedValue.label) {
     return wrappedValue.label;

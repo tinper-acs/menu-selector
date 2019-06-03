@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 // import CSSMotionList from 'rc-animate/lib/CSSMotionList';
 import Selection from './Selection';
 import SearchInput from '../../SearchInput';
-
+import {formatDisplayValue}  from '../../util'
 const NODE_SELECTOR = 'selector';
 const NODE_SEARCH = 'search';
 const TREE_SELECT_EMPTY_VALUE_KEY = 'RC_TREE_SELECT_EMPTY_VALUE_KEY';
@@ -21,6 +21,8 @@ const SelectorList = props => {
     valueEntities,
     inputRef,
     onMultipleSelectorRemove,
+    valueField,//key值
+    inputDisplay,
   } = props;
   const nodeKeys = [];
 
@@ -31,13 +33,15 @@ const SelectorList = props => {
   }
 
   // Basic selectors
-  myValueList.forEach(({ label, value }) => {
+  myValueList.forEach((item) => {
     // const { props: { disabled } = {} } = (valueEntities[value] || {}).node || {};
+    let inputVal =  formatDisplayValue(item,inputDisplay);
+    let key = item[valueField] || item.refpk;//兼容初始值可能会没有valueField
     nodeKeys.push({
-      key: value,
+      key: key,
       type: NODE_SELECTOR,
-      label,
-      value,
+      label:key,
+      value:inputVal,
       disabled:false,
     });
   });
@@ -50,15 +54,15 @@ const SelectorList = props => {
     } else if (typeof maxTagPlaceholder === 'function') {
       const restValueList = selectorValueList.slice(maxTagCount);
       content = maxTagPlaceholder(
-        labelInValue ? restValueList : restValueList.map(({ value }) => value),
+         restValueList.map(({ value }) => value),
       );
     }
 
     nodeKeys.push({
       key: 'rc-tree-select-internal-max-tag-counter',
       type: NODE_SELECTOR,
-      label: content,
-      value: null,
+      label: null,
+      value: content,
       disabled: true,
     });
   }
@@ -86,7 +90,7 @@ const SelectorList = props => {
               {...props}
               className={className}
               style={style}
-              key={value || TREE_SELECT_EMPTY_VALUE_KEY}
+              key={label || TREE_SELECT_EMPTY_VALUE_KEY}
               label={label}
               value={value}
               onRemove={disabled ? null : onMultipleSelectorRemove}
