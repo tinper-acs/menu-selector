@@ -82,6 +82,7 @@ class Select extends React.Component {
     removeIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
     // switcherIcon: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),// [Legacy] Deprecated.
     
+    valueList:PropTypes.arrayOf(PropTypes.object),
     valueField: PropTypes.string,
     pageCount: PropTypes.number,
     totalElements: PropTypes.number,
@@ -89,6 +90,7 @@ class Select extends React.Component {
     onPaginationSelect:PropTypes.func,
     onMenuClick:PropTypes.func,
     inputDisplay: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),//新增input框的展示方式
+    displayField: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),//下拉列表的展示
   };
 
   static childContextTypes = {
@@ -114,13 +116,16 @@ class Select extends React.Component {
     clearIcon:<Icon className={`rc-tree-select-selection-choice-clear-icon`} type={' uf-close-c'}></Icon>,//是单选最后的X
     removeIcon:<Icon className={`rc-tree-select-selection-choice-remove-icon`}type={' uf-close'}></Icon>, // 每项的关闭
     menuIcon:<Icon className={`rc-tree-select-selection-menu-icon`}type={' uf-navmenu'}></Icon>, // 每项的关闭
+    
+    valueList:[],
     valueField:'label',
     pageCount:0,
     totalElements:0,
     currPageIndex:0,
     onPaginationSelect:()=>{},
     onMenuClick:()=>{},
-    inputDisplay:(record)=>{return `${record.value}-${record.label}`} ,
+    inputDisplay:'{refname}' ,
+    displayField:'{refname}'
   };
 
   constructor(props) {
@@ -259,7 +264,7 @@ class Select extends React.Component {
   };
   onSelectorMenu = event =>{
     event.stopPropagation();
-    onMenuClick();
+    this.props.onMenuClick();
 
   }
   onSelectorClear = event => {
@@ -395,7 +400,7 @@ class Select extends React.Component {
     const { keyCode } = event;
 
     if (KeyCode.BACKSPACE === keyCode && multiple && !searchValue && selectorValueList.length) {
-      const lastValue = selectorValueList[selectorValueList.length - 1][valueField];
+      const lastValue = selectorValueList[selectorValueList.length - 1][valueField] ||  selectorValueList[selectorValueList.length - 1].refpk;//兼容input上的值是value字段获取的
       this.onMultipleSelectorRemove(event, lastValue);
     }
   };

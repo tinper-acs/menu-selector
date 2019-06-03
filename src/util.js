@@ -62,7 +62,7 @@ export function refValParse (value){
       if(!valueMap.hasOwnProperty('refname') || !valueMap.hasOwnProperty('refpk')){
         warning(
           false,
-          `value or defaultValue not contains refname or refpk`,
+          `value or defaultValue does not contains refname or refpk`,
         );
         return null;
       }else{
@@ -72,13 +72,18 @@ export function refValParse (value){
       return null;
   }
 }
+/**
+ * 处理传入的value或者defaultValue，将value中refname和refpk分别放入selectorValueList，selectorValueMap。
+ * 多选的情况考虑
+ * @param {ObjectVal} ObjectVal 
+ */
 export function formatInternalValue (ObjectVal) {
   let valueList  = ObjectVal.refname.split(',');
   let idList = ObjectVal.refpk.split(',');
   if(valueList.length !== idList.length ){
     warning(
       false,
-      `value or defaultValue doesnt contains same length`,
+      `refname and refpk in value or defaultValue do not contains same length`,
     );
   }else{
     let selectorValueList = [],selectorValueMap={};
@@ -90,9 +95,10 @@ export function formatInternalValue (ObjectVal) {
   }
 }
 export function formatDisplayValue(item,inputDisplay) {
-  if(item.refname){ //为了匹配value的值
-    return item.refname;
-  }
+  // 传入时做兼容
+  // if(item.refname){ //为了匹配value的值
+  //   return item.refname;
+  // }
   if (typeof inputDisplay === 'function') {
      return inputDisplay(item)
   }else{

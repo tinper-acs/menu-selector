@@ -57,7 +57,8 @@ class BasePopup extends React.Component {
       pageCount,
       totalElements,
       currPageIndex,
-      onPaginationSelect
+      onPaginationSelect,
+      displayField,
     } = this.props;
     const {
       rcTreeSelect: { onPopupKeyDown,onMenuSelect,onMenuMultipleSelect},
@@ -67,6 +68,14 @@ class BasePopup extends React.Component {
       $notFound = this.renderNotFound();
     }else{
         valueList.forEach(item=>{
+          let text = '';
+          if (typeof displayField === 'string') {
+            text = displayField.format(item)
+          } else if (typeof displayField === 'function') {
+            text = displayField(item);
+          } else {
+            text = item.refname;
+          }
           let _checked = Object.keys(selectorValueMap).indexOf(item[valueField]) > -1
           $cloneMenuItems.push(
             <li 
@@ -77,7 +86,8 @@ class BasePopup extends React.Component {
             // value={JSON.stringify(item)} 
             onClick={(e)=>this.onItemClick(e,item,_checked)}
             >
-              {item.value || item[valueField]}  
+              {/* {item.value || item[valueField]}   */}
+              {text}
             </li>
           )
         })

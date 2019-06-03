@@ -8,6 +8,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TreeSelect from '../../src/index';
+import Icon from 'bee-icon';
+import 'bee-icon/build/Icon.css'
 import '../../src/index.less';
 import '../demo.scss';
 
@@ -111,9 +113,13 @@ class Demo extends React.Component {
           open={tsOpen}
           valueList={valueList}
           valueField={'label'}
+          inputDisplay = {
+            record=>{if(record.refname){ return  `${record.refname}-la` } return `${record.value}-la`}
+          }
+          // displayField = {record=>{if(record.refname){ return  record.refname } return record.value}}
           displayField={(record)=>{
             if(record.value){
-              return <div > <Icon type="uf-personin-o" style={{ color: 'red' }} /> {record.value}-{record.label}-{record.type}</div>
+              return <div > <Icon type="uf-personin-o" style={{ color: 'red' }} /> {record.value}-{record.label}</div>
             }else{
               return record.refname
             }

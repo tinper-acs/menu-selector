@@ -7,6 +7,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Icon from 'bee-icon';
 import TreeSelect from '../../src/index';
 import '../../src/index.less';
 import '../demo.scss';
@@ -128,6 +129,17 @@ class Demo2 extends React.Component {
           totalElements={92}
           currPageIndex={this.state.currPageIndex}
           onSelect={this.onSelect}
+          inputDisplay = {
+            record=>{if(record.refname){ return  `${record.refname}-la` } return `${record.value}-la`}
+          }
+          // displayField = {record=>{if(record.refname){ return  record.refname } return record.value}}
+          displayField={(record)=>{
+            if(record.value){
+              return <div > <Icon type="uf-personin-o" style={{ color: 'red' }} /> {record.value}-{record.label}</div>
+            }else{
+              return record.refname
+            }
+          }}
         />
       </div>
     );
