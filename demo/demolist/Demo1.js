@@ -20,6 +20,7 @@ class Demo extends React.Component {
     visible: false,
     searchValue: '1',
     value: [{label:'2',value:'test2'}],
+    // value:'{"refname":"test2","refpk":"2"}',
     valueList:[ {label:'2',value:'test2'},
     {label:'22',value:'test22'},
     {label:'222',value:'test222'}, 

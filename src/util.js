@@ -1,5 +1,6 @@
 
 import warning from 'warning';
+import './polyfill_shim'
 // =================== MISC ====================
 export function toTitle(title) {
   if (typeof title === 'string') {
