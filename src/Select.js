@@ -60,10 +60,10 @@ class Select extends React.Component {
     // autoClearSearchValue: PropTypes.bool,// [Legacy] Deprecated.
     searchPlaceholder: PropTypes.node, // [Legacy] Confuse with placeholder
     disabled: PropTypes.bool,
-    children: PropTypes.node,
+    // children: PropTypes.node,
     maxTagCount: PropTypes.number,
     maxTagPlaceholder: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-    maxTagTextLength: PropTypes.number,
+    // maxTagTextLength: PropTypes.number,
 
     dropdownMatchSelectWidth: PropTypes.bool,
     notFoundContent: PropTypes.node,
@@ -85,7 +85,7 @@ class Select extends React.Component {
     totalElements: PropTypes.number,
     currPageIndex: PropTypes.number,
     onPaginationSelect:PropTypes.func,
-    onMenuClick:PropTypes.func,
+    onMenuIconClick:PropTypes.func,
     inputDisplay: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),//新增input框的展示方式
     displayField: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),//下拉列表的展示
     topPagination:PropTypes.bool,
@@ -121,7 +121,7 @@ class Select extends React.Component {
     totalElements:0,
     currPageIndex:0,
     onPaginationSelect:()=>{},
-    onMenuClick:()=>{},
+    onMenuIconClick:()=>{},
     inputDisplay:'{refname}' ,
     displayField:'{refname}',
     topPagination:false,//分页在content上面
@@ -193,14 +193,38 @@ class Select extends React.Component {
     if (prevState.init) {
       processState('defaultValue', propValue => {
         // newState.valueList = formatInternalValue(propValue, nextProps);
-        newState.value = refValParse(propValue, nextProps);
-        valueRefresh = true;
+        if(typeof(propValue)  === 'string'){
+          newState.value = refValParse(propValue, nextProps);
+          valueRefresh = true;
+        }else if(Array.isArray(propValue)){
+          //修改，允许数组
+          let temp = JSON.stringify(propValue),selectorValueMap={};
+          newState.value = JSON.parse(temp);
+          newState.selectorValueList =JSON.parse(temp);
+          JSON.parse(temp).forEach(item=>{
+            selectorValueMap[item[nextProps.valueField]] = item;
+          })
+          newState.selectorValueMap = selectorValueMap;
+          valueRefresh = false;
+        }
+        
       });
     }
     processState('value', propValue => {
-      // newState.valueList = formatInternalValue(propValue, nextProps);
-      newState.value = refValParse(propValue, nextProps);//拆成对象
-      valueRefresh = true;
+      if(typeof(propValue) === 'string'){
+        newState.value = refValParse(propValue, nextProps);
+        valueRefresh = true;
+      }else if(Array.isArray(propValue)){
+        //修改，允许数组
+        let temp = JSON.stringify(propValue),selectorValueMap={};
+        newState.value = JSON.parse(temp);
+        newState.selectorValueList =JSON.parse(temp);
+        JSON.parse(temp).forEach(item=>{
+          selectorValueMap[item[nextProps.valueField]] = item;
+        })
+        newState.selectorValueMap = selectorValueMap;
+        valueRefresh = false;
+      }
     });
 
      // Selector Value List
@@ -265,7 +289,7 @@ class Select extends React.Component {
    */
   onSelectorMenu = event =>{
     event.stopPropagation();
-    this.props.onMenuClick();
+    this.props.onMenuIconClick();
 
   }
   /**

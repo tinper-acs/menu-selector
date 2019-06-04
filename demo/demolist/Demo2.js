@@ -131,18 +131,16 @@ class Demo2 extends React.Component {
           currPageIndex={this.state.currPageIndex}
           onSelect={this.onSelect}
           valueField={'label'}
+          maxTagPlaceholder={'内容多'}
           inputDisplay = {
-            record=>{if(record.refname){ return  `${record.refname}-la` } return `${record.value}-la`}
+            record=>{return `${record.value?record.value:record.refname }-la`}
           }
-
           // displayField = {record=>{if(record.refname){ return  record.refname } return record.value}}
           displayField={(record)=>{
-            if(record.value){
-              return <div > <Icon type="uf-personin-o" style={{ color: 'red' }} /> {record.value}-{record.label}</div>
-            }else{
-              return record.refname
-            }
+            return <div > <Icon type="uf-personin-o" style={{ color: 'red' }} /> {record.value}-{record.label}</div>
+           
           }}
+         
         />
       </div>
     );
