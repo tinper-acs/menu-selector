@@ -1,6 +1,6 @@
-# menu-select
+# menu-selector
 
-menu-select 是列表和分页选择控件，当select下拉框选项为列表和分页时会用到该组件。
+menu-selector 结合列表跟分页的选择控制，支持单选和多选
 
 
 ## 依赖
@@ -13,21 +13,23 @@ menu-select 是列表和分页选择控件，当select下拉框选项为列表�
 
 #### 组件引入
 
-先进行下载MenuSelect包
 
 ```
-npm install --save menu-select
+npm install --save menu-selector
 ```
 
 组件调用
+
 ```js
 import React, { Component } from 'react';
-import Select from 'menu-select';
+import Select from 'menu-selector';
 
 ```
 
-#### 样式引入
 
+#### 样式引入
+```js
+import  from 'menu-selector/dist/index.css';
 ```
 
 ## API
@@ -59,7 +61,7 @@ import Select from 'menu-select';
 | displayField | 下拉列表展示内容格式自定义。item是valueList中数据项。| function(item) | - 
 | topPagination | 分页与下拉列表的位置 ，true分页在上 | boolean | false|
 | onSearch | 文本框值变化时回调 | function(value: string) | - |
-| onSelect | 被选中时调用 | function(value, node, extra) | - 
+| onSelectorChange | input框值改变时回调。情况1.清空操作;case2:单选多选下拉选中数据;case3:多选点击单个数据项删除;case4:多选回车 | function(value, node, extra) | - 
 | valueList | 下拉菜单数据 | array | [] | 
 | valueField| 指定valueList数据项的键 | string | 'refpk' |
 | onMenuIconClick | 汉堡按钮点击操作 | function() | 
@@ -67,8 +69,6 @@ import Select from 'menu-select';
 | totalElements | 下拉菜单中分页的参数：总条数 | number | 0 | 
 | currPageIndex | 下拉菜单中分页的参数：当前页  |number | 0 |
 | onPaginationSelect | 下拉菜单中分页的参数：翻页函数 。index是页码 |function(index) | - |
-
-
 
 
 

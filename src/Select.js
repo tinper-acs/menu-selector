@@ -69,7 +69,8 @@ class Select extends React.Component {
     notFoundContent: PropTypes.node,
 
     onSearch: PropTypes.func,
-    onSelect: PropTypes.func,//Update state selectorValueList.
+    // onSelect: PropTypes.func,//Update state selectorValueList.
+    onSelectorChange: PropTypes.func,//selector的值改变就会调用此方法，清空，单选多选选择数据，多选删除单个数据，多选delete删除
     // onDeselect: PropTypes.func,// [Legacy] Deprecated.
     // onChange: PropTypes.func,//Update state valueList. // [Legacy] Deprecated.
     onDropdownVisibleChange: PropTypes.func,
@@ -121,6 +122,7 @@ class Select extends React.Component {
     totalElements:0,
     currPageIndex:0,
     onPaginationSelect:()=>{},
+    onSelectorChange:()=>{},
     onMenuIconClick:()=>{},
     inputDisplay:'{refname}' ,
     displayField:'{refname}',
@@ -302,8 +304,8 @@ class Select extends React.Component {
    * @return: 
    */
   triggerChange = (status,id,item,selectedArray,) =>{
-    let {onSelect} = this.props;
-    onSelect(status,id,item,selectedArray)
+    let {onSelectorChange} = this.props;
+    onSelectorChange(status,id,item,selectedArray)
 
   }
   onSelectorClear = event => {

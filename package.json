@@ -1,6 +1,6 @@
 {
-  "name": "menu-select",
-  "version": "1.0.0",
+  "name": "menu-selector",
+  "version": "1.0.0-beta.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
