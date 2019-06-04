@@ -53,10 +53,10 @@ export const UNSELECTABLE_ATTRIBUTE = {
 export function refValParse (value){
   if(!value){
     warning(
-      false,
+      true,
       `value or defaultValue cant not be empty`,
     );
-    return null;
+    return '{"refname":"",refpk:""}';
   }
   try{
       let valueMap = JSON.parse(value);
@@ -65,12 +65,12 @@ export function refValParse (value){
           false,
           `value or defaultValue does not contains refname or refpk`,
         );
-        return null;
+        return '{"refname":"",refpk:""}';
       }else{
           return JSON.parse(value);
       }
   }catch(e) {
-      return null;
+      return '{"refname":"",refpk:""}';
   }
 }
 /**
@@ -79,8 +79,13 @@ export function refValParse (value){
  * @param {ObjectVal} ObjectVal 
  */
 export function formatInternalValue (ObjectVal) {
-  let valueList  = ObjectVal.refname.split(',');
-  let idList = ObjectVal.refpk.split(',');
+  //当""{"refname":"","refpk":""}"，ObjectVal.refname是undefined
+  if(!ObjectVal.refname || !ObjectVal.refpk){
+    let selectorValueList = [],selectorValueMap={};
+    return {selectorValueList,selectorValueMap}
+  }
+  let valueList  = typeof(ObjectVal.refname) === 'string'? (ObjectVal.refname).split(','):JSON.stringify(ObjectVal.refname).split(',');
+  let idList = typeof(ObjectVal.refpk) === 'string'? ObjectVal.refpk.split(',') :JSON.stringify(ObjectVal.refpk).split(',');
   if(valueList.length !== idList.length ){
     warning(
       false,

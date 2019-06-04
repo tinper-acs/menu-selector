@@ -195,10 +195,7 @@ class Select extends React.Component {
     if (prevState.init) {
       processState('defaultValue', propValue => {
         // newState.valueList = formatInternalValue(propValue, nextProps);
-        if(typeof(propValue)  === 'string'){
-          newState.value = refValParse(propValue, nextProps);
-          valueRefresh = true;
-        }else if(Array.isArray(propValue)){
+        if(Array.isArray(propValue)){
           //修改，允许数组
           let temp = JSON.stringify(propValue),selectorValueMap={};
           newState.value = JSON.parse(temp);
@@ -208,15 +205,15 @@ class Select extends React.Component {
           })
           newState.selectorValueMap = selectorValueMap;
           valueRefresh = false;
+        }else{
+          newState.value = refValParse(propValue, nextProps);
+          valueRefresh = true;
         }
         
       });
     }
     processState('value', propValue => {
-      if(typeof(propValue) === 'string'){
-        newState.value = refValParse(propValue, nextProps);
-        valueRefresh = true;
-      }else if(Array.isArray(propValue)){
+      if(Array.isArray(propValue)){
         //修改，允许数组
         let temp = JSON.stringify(propValue),selectorValueMap={};
         newState.value = JSON.parse(temp);
@@ -226,7 +223,11 @@ class Select extends React.Component {
         })
         newState.selectorValueMap = selectorValueMap;
         valueRefresh = false;
+      }else{
+        newState.value = refValParse(propValue, nextProps);
+        valueRefresh = true;
       }
+     
     });
 
      // Selector Value List

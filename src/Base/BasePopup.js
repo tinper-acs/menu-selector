@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import { createRef } from '../util';
 import Pagination from 'bee-pagination';
-
+import Loading from 'bee-loading';
 export const popupContextTypes = {
   onPopupKeyDown: PropTypes.func.isRequired,
   onMenuSelect: PropTypes.func.isRequired,
@@ -112,6 +112,7 @@ class BasePopup extends React.Component {
 
     return (
       <div role="listbox" id={ariaId} onKeyDown={onPopupKeyDown} tabIndex={-1}>
+        <Loading show={this.props.loading} container={this} />
         {renderSearch ? renderSearch() : null}
         {!topPagination && $content}
         {

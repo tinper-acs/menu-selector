@@ -37,8 +37,16 @@ class Demo extends React.Component {
     {label:'78787878',value:'test78787878'},
     {label:'787878178',value:'test787878178'},],
     currPageIndex:1,
+    loading:false,
    
   };
+  componentDidMount(){
+    setTimeout(() => {
+      this.setState({
+        loading:true
+      })
+    }, 4000);
+  }
   onSearch = (value, ...args) => {
     console.log('Do Search:', value, ...args);
     let valueList = [];
@@ -108,7 +116,7 @@ class Demo extends React.Component {
           showSearch
           allowClear
           searchValue={searchValue}
-          defaultValue={value}
+          value={value}
           filterTreeNode={false}
           onSearch={this.onSearch}
           open={tsOpen}
