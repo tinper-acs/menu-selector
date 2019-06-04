@@ -71,10 +71,10 @@ class Demo extends React.Component {
     this.setState({ multipleValue: value });
   };
 
-  onSelect = (item) => {
+  onSelect = (status,id,item,arr) => {
     // use onChange instead
     this.setState({
-      value:item.length === 0 ? '':item[0].value,
+      value:arr.length === 0 ? '':arr[0].value,
       
     })
   };

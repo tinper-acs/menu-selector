@@ -72,20 +72,21 @@ class Demo2 extends React.Component {
     this.setState({ multipleValue: value });
   };
 
-  onSelect = (arr) => {
+  onSelect = (status,id,item,arr) => {
     if(arr.length === 0 ) {
       this.setState({
         value:null
       })
       return false
     }
-    let value = [],id=[];
+    let value = [];
+    let ida=[];
     arr.forEach(item=>{
       value.push(item.refname || item.value);
-      id.push(item.refpk || item.label);
+      ida.push(item.refpk || item.label);
     });
     this.setState({
-      value:`{"refname":${JSON.stringify(value.join())},"refpk":${JSON.stringify(id.join())}}`
+      value:`{"refname":${JSON.stringify(value.join())},"refpk":${JSON.stringify(ida.join())}}`
     })
   };
 
@@ -129,9 +130,11 @@ class Demo2 extends React.Component {
           totalElements={92}
           currPageIndex={this.state.currPageIndex}
           onSelect={this.onSelect}
+          valueField={'label'}
           inputDisplay = {
             record=>{if(record.refname){ return  `${record.refname}-la` } return `${record.value}-la`}
           }
+
           // displayField = {record=>{if(record.refname){ return  record.refname } return record.value}}
           displayField={(record)=>{
             if(record.value){
