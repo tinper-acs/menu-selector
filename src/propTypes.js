@@ -1,5 +1,5 @@
 import { isLabelInValue } from './util';
-
+import PropTypes from 'prop-types';
 
 const internalValProp = PropTypes.oneOfType([
     PropTypes.string,
