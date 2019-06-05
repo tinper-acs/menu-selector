@@ -1,8 +1,8 @@
 {
   "name": "menu-selector",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clear": "rimraf dist",
@@ -28,6 +28,7 @@
   "files": [
     "package.json",
     "dist",
+    "lib",
     "README.md"
   ],
   "devDependencies": {
