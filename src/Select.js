@@ -303,17 +303,24 @@ class Select extends React.Component {
    * item当前操作节点的完整数据（valueList取）;
    * selectedArray当前popup选中的节点数组
    * @return: 
+   *  update selectorValueList 
+   *  Fire `onChange` event to user.
    */
   triggerChange = (status,id,item,selectedArray,) =>{
-    let {onSelectorChange} = this.props;
+    let {onSelectorChange,onChange} = this.props;
+    let {selectorValueList} = this.state;
     onSelectorChange(status,id,item,selectedArray)
-
+     // Only do the logic when `onChange` function provided
+    if (onChange) {
+      onChange(selectorValueList);
+    }
   }
   onSelectorClear = event => {
     event.stopPropagation();
     const { disabled,onSelect } = this.props;
     if (disabled) return;
     this.setState({
+      value:[],
       selectorValueList:[],
       selectorValueMap:{},
     },()=>{
@@ -336,6 +343,7 @@ class Select extends React.Component {
       checkedArray.push(selectorValueMap[item])
     });
     this.setState({
+      value:checkedArray,
       selectorValueList:checkedArray,
       selectorValueMap,
     },()=>{
@@ -363,6 +371,7 @@ class Select extends React.Component {
          checkedArray.push(record);
          checkedMap[record[valueField]] = record;
          this.setState({
+          value:checkedArray,
           selectorValueList:checkedArray,
           selectorValueMap:checkedMap,
          })
@@ -375,6 +384,7 @@ class Select extends React.Component {
 					checkedArray.push(selectorValueMap[item])
         });
         this.setState({
+          value:checkedArray,
           selectorValueList:checkedArray,
           selectorValueMap,
         })
@@ -394,6 +404,7 @@ class Select extends React.Component {
 		//点击同一行数据时取消选择
 		if(selectorValueMap.hasOwnProperty(record[valueField])){
       this.setState({
+        value:[],
         selectorValueList:[],
         selectorValueMap:{},
       },()=>{
@@ -405,6 +416,7 @@ class Select extends React.Component {
 			let checkedMap = {};
 			checkedMap[checkedRecord[valueField]] = checkedRecord;
       this.setState({
+        value:checkedArray,
         selectorValueList:checkedArray,
         selectorValueMap:checkedMap,
       },()=>{
