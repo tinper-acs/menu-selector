@@ -76,35 +76,55 @@ export function refValParse (value){
 /**
  * 处理传入的value或者defaultValue，将value中refname和refpk分别放入selectorValueList，selectorValueMap。
  * 多选的情况考虑
- * @param {ObjectVal} ObjectVal 
+ * @param {ObjectValue} ObjectValue :经过refValParse处理的value，是个对象
  */
-export function formatInternalValue (ObjectVal) {
-  //当""{"refname":"","refpk":""}"，ObjectVal.refname是undefined
-  if(!ObjectVal.refname || !ObjectVal.refpk){
+export function formatInternalValue (ObjectValue,nextProps) {
+  //当""{"refname":"","refpk":""}"，ObjectValue.refname是undefined
+  if(!ObjectValue.refname || !ObjectValue.refpk){
     let selectorValueList = [],selectorValueMap={};
     return {selectorValueList,selectorValueMap}
   }
-  let valueList  = typeof(ObjectVal.refname) === 'string'? (ObjectVal.refname).split(','):JSON.stringify(ObjectVal.refname).split(',');
-  let idList = typeof(ObjectVal.refpk) === 'string'? ObjectVal.refpk.split(',') :JSON.stringify(ObjectVal.refpk).split(',');
+  let valueList  = typeof(ObjectValue.refname) === 'string'? (ObjectValue.refname).split(','):JSON.stringify(ObjectValue.refname).split(',');
+  let idList = typeof(ObjectValue.refpk) === 'string'? ObjectValue.refpk.split(',') :JSON.stringify(ObjectValue.refpk).split(',');
   if(valueList.length !== idList.length ){
     warning(
       false,
       `refname and refpk in value or defaultValue do not contains same length`,
     );
-  }else{
     let selectorValueList = [],selectorValueMap={};
-    valueList.forEach((value,index)=>{
-      selectorValueList.push({refname:value,refpk:idList[index]});
-      selectorValueMap[idList[index]] = {refname:value,refpk:idList[index]};
-    });
+    return {selectorValueList,selectorValueMap}
+  }else{
+    let selectorValueList = [],selectorValueMap={},{ valueList:newValueList,valueField} = nextProps;
+    //20190606修改，这里改成idList从props的valueList中拿数据，若是valueList为空，则还是用refname和refpk
+    // selectorValueList 两种，1.从valueList抽取的 2.refname+refpk 组合的
+    idList.forEach((id,index)=>{
+      if(newValueList.length === 0 ){
+        selectorValueList.push({refname:valueList[index],refpk:id});
+        selectorValueMap[id] = {refname:valueList[index],refpk:id};
+        return false;
+      }else{
+        newValueList.some((item,index)=>{
+          if(item[valueField] === id){
+            selectorValueList.push(item);
+            selectorValueMap[id] = item;
+            return true;//跳出循环
+          }else{
+            return false;
+          }
+        });
+      }
+      
+    })
     return {selectorValueList,selectorValueMap}
   }
 }
-export function formatDisplayValue(item,inputDisplay) {
+export function formatDisplayValue(item,inputDisplay,valueList) {
   // 传入时做兼容
-  // if(item.refname){ //为了匹配value的值
-  //   return item.refname;
-  // }
+  //selectorValueList的取值符合refname+refpk 组合的
+  if(item.refname && valueList.length===0 ){ 
+    return item.refname;
+  }
+  //selectorValueList的取值符合从valueList抽取的
   if (typeof inputDisplay === 'function') {
      return inputDisplay(item)
   }else{

@@ -100,10 +100,10 @@ export default function (modeName) {
     }
 
     renderClear() {
-      const { prefixCls, allowClear, selectorValueList, clearIcon,inputDisplay } = this.props;
+      const { prefixCls, allowClear, selectorValueList, clearIcon,inputDisplay,valueList } = this.props;
       const { rcTreeSelect: { onSelectorClear } } = this.context;
 
-      if (!allowClear || !selectorValueList.length || !formatDisplayValue(selectorValueList[0],inputDisplay)) {
+      if (!allowClear || !selectorValueList.length || !formatDisplayValue(selectorValueList[0],inputDisplay,valueList)) {
         return null;
       }
 

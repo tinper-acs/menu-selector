@@ -132,7 +132,7 @@ class Select extends React.Component {
   constructor(props) {
     super(props);
 
-    const { prefixAria, defaultOpen, open,} = props;
+    const { prefixAria, defaultOpen, open,valueList} = props;
 
     this.state = {
       open: open || defaultOpen,
@@ -141,6 +141,7 @@ class Select extends React.Component {
       searchValue:'',
       value:'',//接收value
       init: true,
+      valueList:valueList || [],
     };
 
     this.selectorRef = createRef();
@@ -170,6 +171,7 @@ class Select extends React.Component {
       },
     };
   }
+  
   static getDerivedStateFromProps(nextProps, prevState) {
     const { prevProps = {} } = prevState;
     const newState = {
@@ -189,6 +191,21 @@ class Select extends React.Component {
     // Open
     processState('open', propValue => {
       newState.open = propValue;
+    });
+
+    //getNewValueList
+    processState('valueList', propValue => {
+      newState.valueList = propValue;
+      if(!prevState.init){
+        //不是初始化。因为初始化会继续走下面的value，初始化selectorValueList，不是初始化需要手动初始化
+        let value = prevState.value
+        let {selectorValueList,selectorValueMap} =  formatInternalValue(
+          value,nextProps
+        );// 考虑多选
+        newState.selectorValueList =selectorValueList
+        newState.selectorValueMap = selectorValueMap;
+      }
+     
     });
 
     // Value change
@@ -229,7 +246,7 @@ class Select extends React.Component {
       }
      
     });
-
+   
      // Selector Value List
      if (valueRefresh) {
       // Calculate the value list for `Selector` usage
@@ -238,7 +255,7 @@ class Select extends React.Component {
         newState.selectorValueMap = {};
       }else{
         let {selectorValueList,selectorValueMap} =  formatInternalValue(
-          newState.value,
+          newState.value,nextProps
         );// 考虑多选
         newState.selectorValueList =selectorValueList
         newState.selectorValueMap = selectorValueMap;
@@ -540,10 +557,11 @@ class Select extends React.Component {
       open,
       focused,
       searchValue,
+      valueList,
     } = this.state;
     const { 
       prefixCls,
-      valueList,
+      // valueList,
       valueField,
       inputDisplay,
       multiple,

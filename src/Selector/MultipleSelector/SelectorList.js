@@ -14,11 +14,10 @@ const SelectorList = props => {
     choiceTransitionName,
     prefixCls,
     onChoiceAnimationLeave,
-    labelInValue,
     maxTagCount,
     maxTagPlaceholder,
     showSearch,
-    valueEntities,
+    valueList,
     inputRef,
     onMultipleSelectorRemove,
     valueField,//key值
@@ -35,7 +34,7 @@ const SelectorList = props => {
   // Basic selectors
   myValueList.forEach((item) => {
     // const { props: { disabled } = {} } = (valueEntities[value] || {}).node || {};
-    let inputVal =  formatDisplayValue(item,inputDisplay);
+    let inputVal =  formatDisplayValue(item,inputDisplay,valueList);
     let key = item[valueField] || item.refpk;//兼容初始值可能会没有valueField
     nodeKeys.push({
       key: key,
