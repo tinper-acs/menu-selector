@@ -164,6 +164,8 @@ export default function (modeName) {
         ariaId,
         renderSelection, renderPlaceholder,
         tabIndex,
+        showArrow,
+        showMenuIcon
       } = this.props;
       const { rcTreeSelect: { onSelectorKeyDown } } = this.context;
 
@@ -208,8 +210,9 @@ export default function (modeName) {
           >
             {renderSelection()}
             {this.renderClear()}
-            {/* {this.renderArrow()} */}
-            {this.renderMenuIcon()}
+            
+            {showArrow && this.renderArrow()}
+            { showMenuIcon && this.renderMenuIcon()}
             {renderPlaceholder && renderPlaceholder()}
           </span>
         </span>

@@ -97,7 +97,7 @@ class MultipleSelector extends React.Component {
       <Selector
         {...this.props}
         tabIndex={-1}
-        showArrow={false}
+        // showArrow={false}
         renderSelection={this.renderSelection}
         renderPlaceholder={this.renderPlaceholder}
       />

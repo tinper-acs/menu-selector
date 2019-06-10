@@ -85,8 +85,8 @@ export function formatInternalValue (ObjectValue,nextProps) {
     let selectorValueList = [],selectorValueMap={};
     return {selectorValueList,selectorValueMap}
   }
-  let valueList  = typeof(ObjectValue.refname) === 'string'? (ObjectValue.refname).split(','):JSON.stringify(ObjectValue.refname).split(',');
-  let idList = typeof(ObjectValue.refpk) === 'string'? ObjectValue.refpk.split(',') :JSON.stringify(ObjectValue.refpk).split(',');
+  let valueList  = typeof(ObjectValue.refname) === 'string'? (ObjectValue.refname).split(';'):JSON.stringify(ObjectValue.refname).split(';');
+  let idList = typeof(ObjectValue.refpk) === 'string'? ObjectValue.refpk.split(';') :JSON.stringify(ObjectValue.refpk).split(';');
   if(valueList.length !== idList.length ){
     warning(
       false,
@@ -104,18 +104,21 @@ export function formatInternalValue (ObjectValue,nextProps) {
         selectorValueMap[id] = {refname:valueList[index],refpk:id};
         return false;
       }else{
-        newValueList.some((item,valueIndex)=>{
+        let isExist = newValueList.some((item,valueIndex)=>{
           if(item[valueField] === id){
             selectorValueList.push(item);
             selectorValueMap[id] = item;
             return true;//跳出循环
           }else{
-            //考虑，选中的数据不在下拉数据中
-            selectorValueList.push({refname:valueList[index],refpk:id});
-            selectorValueMap[id] = {refname:valueList[index],refpk:id};
             return false;
           }
         });
+        if(!isExist){
+          //考虑，选中的数据不在下拉数据中
+          selectorValueList.push({refname:valueList[index],refpk:id});
+          selectorValueMap[id] = {refname:valueList[index],refpk:id};
+        }
+        
       }
       
     })
