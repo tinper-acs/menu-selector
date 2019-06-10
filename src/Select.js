@@ -198,14 +198,26 @@ class Select extends React.Component {
       newState.valueList = propValue;
       if(!prevState.init){
         //不是初始化。因为初始化会继续走下面的value，初始化selectorValueList，不是初始化需要手动初始化
+        //value分为两种，数组直接赋值，字符串需要在下拉数据中进行查找取出完整数据
         let value = prevState.value
-        let {selectorValueList,selectorValueMap} =  formatInternalValue(
-          value,nextProps
-        );// 考虑多选
-        newState.selectorValueList =selectorValueList
-        newState.selectorValueMap = selectorValueMap;
+        if(Array.isArray(value)){
+          //修改，允许数组
+          let temp = JSON.stringify(value),selectorValueMap={};
+          newState.value = JSON.parse(temp);
+          newState.selectorValueList =JSON.parse(temp);
+          JSON.parse(temp).forEach(item=>{
+            selectorValueMap[item[nextProps.valueField]] = item;
+          })
+          newState.selectorValueMap = selectorValueMap;
+          valueRefresh = false;
+        }else{
+          let {selectorValueList,selectorValueMap} =  formatInternalValue(
+            value,nextProps
+          );// 考虑多选
+          newState.selectorValueList =selectorValueList
+          newState.selectorValueMap = selectorValueMap;
+        }
       }
-     
     });
 
     // Value change

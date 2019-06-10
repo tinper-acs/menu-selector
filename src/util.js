@@ -74,6 +74,7 @@ export function refValParse (value){
   }
 }
 /**
+ * 获取selectorValueList,selectorValueMap
  * 处理传入的value或者defaultValue，将value中refname和refpk分别放入selectorValueList，selectorValueMap。
  * 多选的情况考虑
  * @param {ObjectValue} ObjectValue :经过refValParse处理的value，是个对象
@@ -103,12 +104,15 @@ export function formatInternalValue (ObjectValue,nextProps) {
         selectorValueMap[id] = {refname:valueList[index],refpk:id};
         return false;
       }else{
-        newValueList.some((item,index)=>{
+        newValueList.some((item,valueIndex)=>{
           if(item[valueField] === id){
             selectorValueList.push(item);
             selectorValueMap[id] = item;
             return true;//跳出循环
           }else{
+            //考虑，选中的数据不在下拉数据中
+            selectorValueList.push({refname:valueList[index],refpk:id});
+            selectorValueMap[id] = {refname:valueList[index],refpk:id};
             return false;
           }
         });
@@ -120,7 +124,7 @@ export function formatInternalValue (ObjectValue,nextProps) {
 }
 export function formatDisplayValue(item,inputDisplay,valueList) {
   // 传入时做兼容
-  //selectorValueList的取值符合refname+refpk 组合的
+  //selectorValueList的取值符合refname+refpk 组合的，即没从valueList中取出完整数据
   if(item.refname && valueList.length===0 ){ 
     return item.refname;
   }
