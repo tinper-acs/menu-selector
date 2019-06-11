@@ -2,16 +2,16 @@ import { isLabelInValue } from './util';
 import PropTypes from 'prop-types';
 
 const internalValProp = PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]);
-  
+  PropTypes.string,
+  PropTypes.arrayOf(PropTypes.object),
+]);
+
+
 export function genArrProps(propType) {
-    return PropTypes.oneOfType([
-      propType,
-      PropTypes.arrayOf(propType),
-    ]);
-  }
+  return PropTypes.oneOfType([
+    propType,
+  ]);
+}
 
 
 /**
@@ -20,28 +20,35 @@ export function genArrProps(propType) {
  * Check array is not necessary. Let's simplify this check logic.
  */
 export function valueProp(...args) {
-    const [props, propName, Component] = args;
-  
-    if (isLabelInValue(props)) {
-      const err = genArrProps(PropTypes.shape({
-        label: PropTypes.node,
-        value: internalValProp,
-      }))(...args);
-      if (err) {
-        return new Error(
-          `Invalid prop \`${propName}\` supplied to \`${Component}\`. ` +
-          `You should use { label: string, value: string | number } or [{ label: string, value: string | number }] instead.`
-        );
-      }
-      return null;
-    }
-  
-    const err = genArrProps(internalValProp)(...args);
-    if (err) {
+  const [props, propName, Component] = args;
+  if (typeof (props[propName]) === 'string') {
+    if (!/refname/.test(props[propName])) {
       return new Error(
         `Invalid prop \`${propName}\` supplied to \`${Component}\`. ` +
-        `You should use string or [string] instead.`
+        `缺少refname 。You should use '{ "refname": string, "refpk": string  } 'instead. `
+      );
+    }
+    if (!/refpk/.test(props[propName])) {
+      return new Error(
+        `Invalid prop \`${propName}\` supplied to \`${Component}\`. ` +
+        `缺少refpk 。You should use '{ "refname": string, "refpk": string  } 'instead. `
+      );
+    }
+    if (props.valueField !== 'refpk') {
+      return new Error(
+        `Invalid prop \`${propName}\` supplied to \`${Component}\`. ` +
+        `when you  use '{ "refname": string, "refpk": string  } ',please let valueField equals 'refpk'. `
       );
     }
     return null;
   }
+
+  const err = genArrProps(internalValProp)(...args);
+  if (err) {
+    return new Error(
+      `Invalid prop \`${propName}\` supplied to \`${Component}\`. ` +
+      `You should use string or [object] instead.`
+    );
+  }
+  return null;
+}

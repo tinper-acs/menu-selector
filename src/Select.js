@@ -403,6 +403,8 @@ class Select extends React.Component {
           value:checkedArray,
           selectorValueList:checkedArray,
           selectorValueMap:checkedMap,
+         },()=>{
+          this.triggerChange(!status,record[valueField],record,checkedArray)
          })
 	
 			}else if( status && selectorValueMap[record[valueField]] ){
@@ -416,9 +418,10 @@ class Select extends React.Component {
           value:checkedArray,
           selectorValueList:checkedArray,
           selectorValueMap,
+        },()=>{
+          this.triggerChange(!status,record[valueField],record,checkedArray)
         })
       }
-      this.triggerChange(!status,record[valueField],record,this.state.selectorValueList)
 
 		}
   }
