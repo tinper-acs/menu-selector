@@ -128,7 +128,7 @@ export function formatInternalValue (ObjectValue,nextProps) {
 export function formatDisplayValue(item,inputDisplay,valueList) {
   // 传入时做兼容
   //selectorValueList的取值符合refname+refpk 组合的，即没从valueList中取出完整数据
-  if(item.refname && valueList.length===0 ){ 
+  if(Object.keys(item).length===2 && item.refname && valueList.length===0 ){ 
     return item.refname;
   }
   //selectorValueList的取值符合从valueList抽取的
