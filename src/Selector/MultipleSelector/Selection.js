@@ -45,7 +45,7 @@ class Selection extends React.Component {
         {...UNSELECTABLE_ATTRIBUTE}
         role="menuitem"
         className={classNames(`${prefixCls}-selection__choice`, className)}
-        title={toTitle(label)}
+        title={toTitle(value || label)}
       >
         <span className={`${prefixCls}-selection__choice__content`}>{content}</span>
         {onRemove && (

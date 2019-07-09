@@ -67,8 +67,7 @@ class SearchInput extends React.Component {
    * ref: https://github.com/react-component/tree-select/issues/65
    */
   alignInputWidth = () => {
-    this.inputRef.current.style.width =
-      `${this.mirrorInputRef.current.clientWidth}px`;
+    this.inputRef.current.style.width = this.mirrorInputRef.current.clientWidth + 10 +`px`;
   };
 
   /**
