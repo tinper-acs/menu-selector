@@ -73,4 +73,4 @@ import  from 'menu-selector/dist/index.css';
 
 
 #### 开发调试
-
+rc-trigger只能使用3.0.0-rc版本
