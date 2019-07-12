@@ -132,6 +132,15 @@ class Demo2 extends React.Component {
           onSelect={this.onSelect}
           valueField={'label'}
           maxTagPlaceholder={'内容多'}
+          // open={this.state.tsOpen}
+          onDropdownVisibleChange={(v, info) => {
+            console.log("看效果,保持之前的效果",v,info);
+            // this.setState({
+            //   tsOpen:v
+            // });
+            return true;
+            
+          }}
           inputDisplay = {
             record=>{return `${record.value?record.value:record.refname }-la`}
           }

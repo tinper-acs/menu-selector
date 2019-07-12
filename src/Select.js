@@ -321,7 +321,10 @@ class Select extends React.Component {
    */
   onSelectorMenu = event =>{
     event.stopPropagation();
-    this.props.onMenuIconClick();
+    this.setOpenState(false);
+    setTimeout(() => {
+      this.props.onMenuIconClick();
+    }, 0);
 
   }
   /**
