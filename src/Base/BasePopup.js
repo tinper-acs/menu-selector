@@ -75,7 +75,7 @@ class BasePopup extends React.Component {
           } else if (typeof displayField === 'function') {
             text = displayField(item);
           } else {
-            text = item.refname;
+            text = item.refname || 'refname miss';
           }
           let _checked = Object.keys(selectorValueMap).indexOf(item[valueField]) > -1
           $cloneMenuItems.push(

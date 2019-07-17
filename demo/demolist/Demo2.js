@@ -18,7 +18,7 @@ class Demo2 extends React.Component {
     tsOpen: false,
     visible: false,
     searchValue: '1',
-    value: '{"refname":"v563563563563,v5263","refpk":"563563563563,5623"}',
+    value: '{"refname":"v563563563563;v5263","refpk":"563563563563;5623"}',
     valueList:[
       {label:'5623',value:'v5263'},
       {label:'563563',value:'v563563'},

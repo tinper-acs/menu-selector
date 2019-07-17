@@ -21,7 +21,7 @@ class Demo extends React.Component {
       tsOpen: false,
       visible: false,
       searchValue: '1',
-      value: '{"refname":"test22-自定义","refpk":"22"}',
+      value: '{"refname":"test22-自定义","refpk":"22","refcode":"cccooode"}',
       // value:'{"refname":"test2","refpk":"2"}',
       valueList:[ 
         // {label:'3',value:'333',tag:'2'}
@@ -131,7 +131,7 @@ class Demo extends React.Component {
           valueList={valueList}
           valueField={'label'}
           inputDisplay = {
-            record=>{return `${record.value}-la-${record.tag}`}
+            record=>{return `${record.refcode || record.value}-la-${record.tag}`}
           }
           // displayField = {record=>{if(record.refname){ return  record.refname } return record.value}}
           displayField={(record)=>{

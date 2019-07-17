@@ -34,16 +34,16 @@ export function valueProp(...args) {
         `缺少refpk 。You should use '{ "refname": string, "refpk": string  } 'instead. `
       );
     }
-    if (props.valueField !== 'refpk') {
-      return new Error(
-        `Invalid prop \`${propName}\` supplied to \`${Component}\`. ` +
-        `when you  use '{ "refname": string, "refpk": string  } ',please let valueField equals 'refpk'. `
-      );
-    }
+    // if (props.valueField !== 'refpk') {
+    //   return new Error(
+    //     `Invalid prop \`${propName}\` supplied to \`${Component}\`. ` +
+    //     `when you  use '{ "refname": string, "refpk": string  } ',please let valueField equals 'refpk'. `
+    //   );
+    // }
     return null;
   }
 
-  const err = genArrProps(internalValProp)(...args);
+const err = genArrProps(internalValProp)(...args);
   if (err) {
     return new Error(
       `Invalid prop \`${propName}\` supplied to \`${Component}\`. ` +

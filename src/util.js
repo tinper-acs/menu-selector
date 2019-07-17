@@ -50,6 +50,39 @@ export const UNSELECTABLE_ATTRIBUTE = {
 
 
 // =================== Value ===================
+//方法2 不按照refname和refpk来解析
+// export function refValParse(value) {
+//   if(!value){
+//     warning(
+//       true,
+//       `value or defaultValue cant not be empty`,
+//     );
+//     return '{"refname":"",refpk:""}';
+//   }
+//   if(Object.prototype.toString.call(value)==='[object Object]'){
+//     return value
+//   }
+//   if (typeof value === 'string') {
+//     try {
+//       let valueMap = JSON.parse(value);
+//       if (typeof valueMap === 'object' && valueMap) {
+//         return valueMap;
+//       } else {
+//         warning(
+//           false,
+//           `JSON parse解析报错`,
+//         );
+//         return '{"refname":"",refpk:""}';
+//       }
+//     } catch (error) {
+//       warning(
+//         false,
+//         `JSON parse解析报错 ${error}`,
+//       );
+//       return '{"refname":"",refpk:""}';
+//     }
+//   }
+// }
 export function refValParse (value){
   if(!value){
     warning(
@@ -73,69 +106,19 @@ export function refValParse (value){
       return '{"refname":"",refpk:""}';
   }
 }
-/**
- * 获取selectorValueList,selectorValueMap
- * 处理传入的value或者defaultValue，将value中refname和refpk分别放入selectorValueList，selectorValueMap。
- * 多选的情况考虑
- * @param {ObjectValue} ObjectValue :经过refValParse处理的value，是个对象
- */
-export function formatInternalValue (ObjectValue,nextProps) {
-  //当""{"refname":"","refpk":""}"，ObjectValue.refname是undefined
-  if(!ObjectValue.refname || !ObjectValue.refpk){
-    let selectorValueList = [],selectorValueMap={};
-    return {selectorValueList,selectorValueMap}
-  }
-  let valueList  = typeof(ObjectValue.refname) === 'string'? (ObjectValue.refname).split(';'):JSON.stringify(ObjectValue.refname).split(';');
-  let idList = typeof(ObjectValue.refpk) === 'string'? ObjectValue.refpk.split(';') :JSON.stringify(ObjectValue.refpk).split(';');
-  if(valueList.length !== idList.length ){
-    warning(
-      false,
-      `refname and refpk in value or defaultValue do not contains same length`,
-    );
-    let selectorValueList = [],selectorValueMap={};
-    return {selectorValueList,selectorValueMap}
-  }else{
-    let selectorValueList = [],selectorValueMap={},{ valueList:newValueList,valueField} = nextProps;
-    //20190606修改，这里改成idList从props的valueList中拿数据，若是valueList为空，则还是用refname和refpk
-    // selectorValueList 两种，1.从valueList抽取的 2.refname+refpk 组合的
-    idList.forEach((id,index)=>{
-      if(newValueList.length === 0 ){
-        selectorValueList.push({refname:valueList[index],refpk:id});
-        selectorValueMap[id] = {refname:valueList[index],refpk:id};
-        return false;
-      }else{
-        let isExist = newValueList.some((item,valueIndex)=>{
-          if(item[valueField] === id){
-            selectorValueList.push(item);
-            selectorValueMap[id] = item;
-            return true;//跳出循环
-          }else{
-            return false;
-          }
-        });
-        if(!isExist){
-          //考虑，选中的数据不在下拉数据中
-          selectorValueList.push({refname:valueList[index],refpk:id});
-          selectorValueMap[id] = {refname:valueList[index],refpk:id};
-        }
-        
-      }
-      
-    })
-    return {selectorValueList,selectorValueMap}
-  }
-}
+
 export function formatDisplayValue(item,inputDisplay,valueList) {
   // 传入时做兼容
-  //selectorValueList的取值符合refname+refpk 组合的，即没从valueList中取出完整数据
-  if(Object.keys(item).length===2 && item.refname && valueList.length===0 ){ 
-    return item.refname;
-  }
+  // selectorValueList的取值符合refname+refpk 组合的，即没从valueList中取出完整数据
+  // 20190716修改因为selectorValueList的取值符合refname+refpk 组合的即从value属性取出来的也会有其他key，value的
+  // if(Object.keys(item).length===2 && item.refname && valueList.length===0 ){ 
+  //   return item.refname;
+  // }
   //selectorValueList的取值符合从valueList抽取的
   if (typeof inputDisplay === 'function') {
-     return inputDisplay(item)
+     return inputDisplay(item) || item.refname;
   }else{
-    return inputDisplay.format(item)
+    return inputDisplay.format(item) || item.refname;
   }
 }
 export function getRefname(wrappedValue) {
@@ -158,4 +141,79 @@ export function formatSelectorValue(valueList) {
     label: getRefname(wrappedValue),
     value: wrappedValue.value,
   }));
+}
+
+/**
+ * 获取selectorValueList,selectorValueMap
+ * 处理传入的value或者defaultValue，将value中refname和refpk分别放入selectorValueList，selectorValueMap。
+ * 多选的情况考虑
+ * @param {ObjectValue} ObjectValue :经过refValParse处理的value，是个对象
+ */
+export function formatInternalValue (ObjectValue,nextProps) {
+  //当""{"refname":"","refpk":""}"，ObjectValue.refname是undefined
+  if(!ObjectValue.refname || !ObjectValue.refpk){
+    let selectorValueList = [],selectorValueMap={};
+    return {selectorValueList,selectorValueMap}
+  }
+  let ObjectValueNew = Object.assign({},ObjectValue)
+  if(!ObjectValueNew || Object.prototype.toString.call(ObjectValue)!=='[object Object]'){
+    let selectorValueList = [],selectorValueMap={};
+    return {selectorValueList,selectorValueMap}
+  } 
+  let valueList  = typeof(ObjectValueNew.refname) === 'string'? (ObjectValueNew.refname).split(';'):JSON.stringify(ObjectValueNew.refname).split(';');
+  let idList = typeof(ObjectValueNew.refpk) === 'string'? ObjectValueNew.refpk.split(';') :JSON.stringify(ObjectValueNew.refpk).split(';');
+  if(valueList.length !== idList.length ){
+    warning(
+      false,
+      `refname and refpk in value or defaultValue do not contains same length`,
+    );
+    let selectorValueList = [],selectorValueMap={};
+    return {selectorValueList,selectorValueMap}
+  }else{
+    let selectorValueList = [],selectorValueMap={},{ valueList:newValueList,valueField} = nextProps;
+    //20190606修改，这里改成idList从props的valueList中拿数据，若是valueList为空，则还是用refname和refpk
+    // selectorValueList 两种，1.从valueList抽取的 2.refname+refpk组合的（从value中获取的）
+    try{
+      idList.forEach((id,index)=>{
+        let objItem = {};
+         //20190716取出value中所有的key，不仅仅有refname和refpk
+          Object.keys(ObjectValueNew).forEach(key=>{
+            let allKeysVal =  typeof(ObjectValueNew[key]) === 'string'? (ObjectValueNew[key]).split(';'):JSON.stringify(ObjectValueNew[key]).split(';');
+            if(allKeysVal[index] === undefined){
+              throw Error('value的每个键值长度不一致');
+            }
+            objItem[key] = allKeysVal[index];
+          });
+        if(newValueList.length === 0 ){
+          selectorValueList.push(objItem);
+          selectorValueMap[id] = objItem;
+          return false;
+        }else{
+          let isExist = newValueList.some((item,valueIndex)=>{
+            if(item[valueField] === id){
+              selectorValueList.push(item);
+              selectorValueMap[id] = item;
+              return true;//跳出循环
+            }else{
+              return false;
+            }
+          });
+          if(!isExist){
+            //考虑，选中的数据不在下拉数据中
+            selectorValueList.push(objItem);
+            selectorValueMap[id] = objItem;
+          }
+          
+        }
+      })
+      return {selectorValueList,selectorValueMap}
+
+    } catch(e){
+      warning(
+        false,
+        `${e}`,
+      );
+      return {selectorValueList:[],selectorValueMap:{}}
+    }
+  }
 }
