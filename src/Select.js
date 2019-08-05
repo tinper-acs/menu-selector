@@ -455,6 +455,7 @@ class Select extends React.Component {
         selectorValueList:checkedArray,
         selectorValueMap:checkedMap,
       },()=>{
+        this.setOpenState(false);//单选点击一次自动关闭
         this.triggerChange(true,record[valueField],record,checkedArray)
       });
 		}
