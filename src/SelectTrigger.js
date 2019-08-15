@@ -1,3 +1,7 @@
+/*
+ * @Date: 2019-08-15 19:57:52
+ * @LastEditTime: 2019-08-15 20:04:59
+ */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
@@ -79,7 +83,7 @@ class SelectTrigger extends React.Component {
       dropdownPopupAlign, dropdownMatchSelectWidth, dropdownClassName,
       dropdownStyle, onDropdownVisibleChange, getPopupContainer,
       dropdownPrefixCls, popupElement, open,
-      children,
+      children,dropdownDisabled=false,
     } = this.props;
 
     let stretch;
@@ -90,7 +94,7 @@ class SelectTrigger extends React.Component {
     return (
       <Trigger
         ref={this.triggerRef}
-        action={disabled ? [] : ['click']}
+        action={(disabled|| dropdownDisabled) ? [] : ['click']}
         popupPlacement="bottomLeft"
         builtinPlacements={BUILT_IN_PLACEMENTS}
         popupAlign={dropdownPopupAlign}

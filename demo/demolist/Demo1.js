@@ -1,3 +1,7 @@
+/*
+ * @Date: 2019-08-15 19:42:40
+ * @LastEditTime: 2019-08-15 20:05:04
+ */
 /**
  *
  * @title 单选
@@ -139,7 +143,8 @@ class Demo extends React.Component {
            
           }}
           showMenuIcon
-          disabled
+          // disabled
+          dropdownDisabled
           onDropdownVisibleChange={(v, info) => {
             // console.log('single onDropdownVisibleChange', v, info);
             // document clicked
@@ -154,6 +159,7 @@ class Demo extends React.Component {
           totalElements={92}
           currPageIndex={this.state.currPageIndex}
           topPagination
+
         />
       </div>
     );
