@@ -1,6 +1,6 @@
 /*
  * @Date: 2019-08-15 19:57:52
- * @LastEditTime: 2019-08-15 20:04:59
+ * @LastEditTime: 2019-08-15 20:29:15
  */
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -102,7 +102,7 @@ class SelectTrigger extends React.Component {
         popupTransitionName={this.getDropdownTransitionName()}
         onPopupVisibleChange={onDropdownVisibleChange}
         popup={popupElement}
-        popupVisible={open}
+        popupVisible={dropdownDisabled?false:open}
         getPopupContainer={getPopupContainer}
         stretch={stretch}
         popupClassName={classNames(
