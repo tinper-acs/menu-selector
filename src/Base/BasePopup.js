@@ -27,8 +27,7 @@ class BasePopup extends React.Component {
 
 
   renderNotFound = () => {
-    const { prefixCls, notFoundContent } = this.props;
-
+    const { prefixCls, notFoundContent, searchValue } = this.props;
     return <span className={`${prefixCls}-not-found`}>{notFoundContent}</span>;
   };
   
@@ -53,6 +52,8 @@ class BasePopup extends React.Component {
       valueList,
       menuProps,
       selectorValueMap,
+      searchValue,
+      searchStartFlag,
       valueField,
       pageCount,
       totalElements,
@@ -65,7 +66,7 @@ class BasePopup extends React.Component {
       rcTreeSelect: { onPopupKeyDown,onMenuSelect,onMenuMultipleSelect},
     } = this.context;
     let $notFound,$cloneMenuItems=[];
-    if (!valueList || !valueList.length) {
+    if ((!valueList || !valueList.length)&& !!searchStartFlag) {
       $notFound = this.renderNotFound();
     }else{
         valueList.forEach(item=>{

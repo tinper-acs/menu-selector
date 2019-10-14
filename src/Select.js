@@ -475,11 +475,13 @@ class Select extends React.Component {
     if (!this.isSearchValueControlled()) {
       this.setUncontrolledState({
         searchValue: value,
+        searchStartFlag:true,
       });
       
     }else{
       this.setState({
         searchValue: value,
+        searchStartFlag:true,
       });
     }
   
@@ -576,6 +578,7 @@ class Select extends React.Component {
       open,
       focused,
       searchValue,
+      searchStartFlag,
       valueList,
     } = this.state;
     const { 
@@ -589,6 +592,7 @@ class Select extends React.Component {
     const passProps = {
       ...this.props,
       searchValue,
+      searchStartFlag,
       valueList,
       selectorValueList,
       selectorValueMap,
