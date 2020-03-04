@@ -1,12 +1,10 @@
 on:
-  [
-    push:
-      tags:
-        - 'v*',
-    push:
-      branches:
-        - 'master'
-  ]
+  push:
+    branches:
+      - master
+  push:
+    tags:
+      - 'v*'
 name: Publish
 jobs:
   build:
@@ -32,4 +30,4 @@ jobs:
     - run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-    - uses: iuap-design/actions-ynpm-sync@master
+    # - uses: iuap-design/actions-ynpm-sync@master
