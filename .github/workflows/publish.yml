@@ -1,7 +1,12 @@
 on:
-  push:
-    tags:
-    - 'v*'
+  [
+    push:
+      tags:
+        - 'v*',
+    push:
+      branches:
+        - 'master'
+  ]
 name: Publish
 jobs:
   build:
