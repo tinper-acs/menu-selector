@@ -632,7 +632,5 @@ class Select extends React.Component {
 
 // Let warning show correct component name
 Select.displayName = 'MenuSelect';
-
 polyfill(Select);
-
 export default Select;
