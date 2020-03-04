@@ -2,9 +2,6 @@ on:
   push:
     branches:
       - master
-  push:
-    tags:
-      - 'v*'
 name: Publish
 jobs:
   build:
