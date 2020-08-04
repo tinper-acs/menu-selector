@@ -87,6 +87,7 @@ class BasePopup extends React.Component {
             key={item[valueField]} 
             // value={JSON.stringify(item)} 
             onClick={(e)=>this.onItemClick(e,item,_checked)}
+            title={text}
             >
               {/* {item.value || item[valueField]}   */}
               {text}
