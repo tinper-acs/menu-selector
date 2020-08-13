@@ -126,6 +126,8 @@ class BasePopup extends React.Component {
               prev
               next
               boundaryLinks
+              gap={true}
+              size="sm"
               maxButtons={3}
               items={pageCount}
               total={totalElements}
