@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import { createRef } from '../util';
-import Pagination from 'bee-pagination';
-import Loading from 'bee-loading';
+import {Pagination, Spin} from '@tinper/next-ui';
 export const popupContextTypes = {
   onPopupKeyDown: PropTypes.func.isRequired,
   onMenuSelect: PropTypes.func.isRequired,
@@ -114,7 +113,7 @@ class BasePopup extends React.Component {
 
     return (
       <div role="listbox" id={ariaId} onKeyDown={onPopupKeyDown} tabIndex={-1}>
-        <Loading show={this.props.loading} container={this} />
+        <Spin spinning={this.props.loading} getPopupContainer={this} />
         {renderSearch ? renderSearch() : null}
         {!topPagination && $content}
         {
@@ -129,10 +128,9 @@ class BasePopup extends React.Component {
               gap={true}
               size="sm"
               maxButtons={3}
-              items={pageCount}
               total={totalElements}
-              activePage={currPageIndex}
-              onSelect={onPaginationSelect}
+              current={currPageIndex}
+              onChange={onPaginationSelect}
               >
             </Pagination>
           </div>

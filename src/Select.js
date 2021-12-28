@@ -24,7 +24,7 @@ import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
 import raf from 'raf';
 import KeyCode from 'rc-util/lib/KeyCode';
-import Icon from 'bee-icon';
+import { Icon } from "@tinper/next-ui";
 import SelectTrigger from './SelectTrigger';
 import { selectorContextTypes } from './Base/BaseSelector';
 import { popupContextTypes } from './Base/BasePopup';
