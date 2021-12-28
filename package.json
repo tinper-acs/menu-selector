@@ -1,6 +1,6 @@
 {
-  "name": "menu-selector",
-  "version": "2.0.0",
+  "name": "menu-selector-tinper-next",
+  "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
