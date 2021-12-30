@@ -113,7 +113,7 @@ class BasePopup extends React.Component {
 
     return (
       <div role="listbox" id={ariaId} onKeyDown={onPopupKeyDown} tabIndex={-1}>
-        <Spin spinning={this.props.loading} getPopupContainer={this} />
+        <Spin className={`${dropdownPrefixCls}-loading`} spinning={this.props.loading} getPopupContainer={this} />
         {renderSearch ? renderSearch() : null}
         {!topPagination && $content}
         {

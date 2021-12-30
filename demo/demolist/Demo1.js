@@ -144,7 +144,7 @@ class Demo extends React.Component {
           }}
           showMenuIcon
           // disabled
-          dropdownDisabled
+          // dropdownDisabled
           onDropdownVisibleChange={(v, info) => {
             // console.log('single onDropdownVisibleChange', v, info);
             // document clicked

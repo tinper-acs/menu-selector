@@ -16,6 +16,9 @@ module.exports = {
       containers: path.resolve(__dirname, "src/containers/"),
     }
   },
+  externals: {
+    "@tinper/next-ui": "TinperNext"
+  },
   module: {
     rules: [
       // {
