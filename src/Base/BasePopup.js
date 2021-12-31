@@ -110,7 +110,6 @@ class BasePopup extends React.Component {
         </ul>
       );
     }
-
     return (
       <div role="listbox" id={ariaId} onKeyDown={onPopupKeyDown} tabIndex={-1}>
         <Spin className={`${dropdownPrefixCls}-loading`} spinning={this.props.loading} getPopupContainer={this} />
