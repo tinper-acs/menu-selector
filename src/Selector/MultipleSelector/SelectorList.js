@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import CSSMotionList from 'rc-animate/lib/CSSMotionList';
 import Selection from './Selection';
 import SearchInput from '../../SearchInput';
 import {formatDisplayValue}  from '../../util'

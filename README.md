@@ -69,8 +69,3 @@ import  from 'menu-selector/dist/index.css';
 | totalElements | 下拉菜单中分页的参数：总条数 | number | 0 | 
 | currPageIndex | 下拉菜单中分页的参数：当前页  |number | 0 |
 | onPaginationSelect | 下拉菜单中分页的参数：翻页函数 。index是页码 |function(index) | - |
-
-
-
-#### 开发调试
-rc-trigger只能使用3.0.0-rc版本

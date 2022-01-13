@@ -5,7 +5,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { polyfill } from 'react-lifecycles-compat';
-import Trigger from './rc-trigger/index';
+import Trigger from 'rc-trigger';
 import classNames from 'classnames';
 
 import { createRef } from './util';
